@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- 設定等共通部分で使用するリソース -->
     <string name="app_name">Fake GP Base</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- GPベースの英語のみ部分で使用するリソース -->
+    <string name="builder_gpbase">BUILDER</string>
+    <string name="name_gpbase">NAME</string>
+    <string name="fighter_gpbase">FIGHTER</string>
+    <string name="scale_gpbase">SCALE</string>
+    <string name="class_gpbase">CLASS</string>
+    <string name="model_gpbase">MODEL</string>
+    <string name="no_gpbase">No.</string>
+    <string name="operator_gpbase">OPERATOR</string>
+    <string name="gunpla">GUNPLA</string>
+    
 </resources>
