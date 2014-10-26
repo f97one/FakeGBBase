@@ -1,4 +1,4 @@
-FakeGBBase
+FakeGPBase
 ==========
 
 NFCタグに反応するGBベースっぽいもの
