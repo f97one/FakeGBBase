@@ -155,7 +155,7 @@
             android:layout_marginBottom="@dimen/gpbase_text_margin"
             />
         <net.formula97.fakegpbase.TypeFacedTextView
-            android:id="@+id/tvBunplaName"
+            android:id="@+id/tvGunplaName"
             fontsample:font="formation_sans_regular.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
