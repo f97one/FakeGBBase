@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="scale_list">
+        <item>1/144</item>
+        <item>1/100</item>
+        <item>1/60</item>
+        <item>1/72</item>
+        <item>1/550</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string-array name="class_list">
+        <item>HG</item>
+        <item>MG</item>
+        <item>PG</item>
+        <item>RE: 1/100</item>
+        <item>@string/other</item>
+    </string-array>
+</resources>

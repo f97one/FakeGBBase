@@ -8,6 +8,7 @@
     <string name="builder_name">Builder name</string>
     <string name="fighter_name">Fighter name</string>
     <string name="use_tag">Use NFC tag for sleep deterrent</string>
+    <string name="other">other</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
