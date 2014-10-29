@@ -9,6 +9,7 @@
     <string name="fighter_name">Fighter name</string>
     <string name="use_tag">Use NFC tag for sleep deterrent</string>
     <string name="other">other</string>
+    <string name="no_nfc_present">No NFC Feature present.\nPlease choose your GUNPLA manually.</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
