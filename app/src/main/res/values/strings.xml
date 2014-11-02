@@ -12,7 +12,7 @@
     <string name="no_nfc_present">No NFC Feature present.\nPlease choose your GUNPLA manually.</string>
     <string name="dialgo_info">Info</string>
     <string name="dialog_warn">Warning</string>
-    <string name="wish_to_enable">NFC Feature is\'nt enabled.\nDo you wish to enable NFC feature?</string>
+    <string name="wish_to_enable">NFC Feature isn\'t enabled.\nDo you wish to enable NFC feature?</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
