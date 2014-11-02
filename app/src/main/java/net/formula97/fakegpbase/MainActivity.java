@@ -1,6 +1,7 @@
 package net.formula97.fakegpbase;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -91,6 +92,35 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
             } else {
                 startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // フォアグラウンドでのNFCタグ読み込みを開始
+        Intent i = new Intent(this, this.getClass());
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(), 0 ,i, PendingIntent.FLAG_UPDATE_CURRENT);
+        mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // NFCタグ読み込みを中止
+        mNfcAdapter.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if ("android.nfc.action.NDEF_DISCOVERY".equals(intent.getAction())) {
+            byte[] tagRawData = intent.getByteArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         }
     }
 }
