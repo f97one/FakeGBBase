@@ -21,6 +21,8 @@
     <string name="non_scratched">Non-Scratch built</string>
     <string name="partial_scratched">Partial-Scratch built</string>
     <string name="full_scratched">Full-Scratch built</string>
+    <string name="select_gunpla">Select GUNPLA</string>
+    <string name="register_gunpla">Register GUNPLA</string>
 
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
