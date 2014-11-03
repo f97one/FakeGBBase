@@ -7,6 +7,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import net.formula97.fakegpbase.AppConst;
+
 import java.util.EventListener;
 
 /**
@@ -16,7 +18,7 @@ import java.util.EventListener;
  */
 public class MessageDialogs extends DialogFragment {
 
-    public static final String FRAGMENT_TAG = "net.formula97.fakegpbase.fragments.MessageDialogs.DIALOG_TAG";
+    public static final String FRAGMENT_TAG = MessageDialogs.class.getName() + AppConst.DIALOG_FRAGMENT_SUFFIX;
 
     /**
      * 押されたボタンがPositiveButtonだった時のフラグ
