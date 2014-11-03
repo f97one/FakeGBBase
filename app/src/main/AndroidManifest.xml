@@ -39,6 +39,13 @@
         <activity
             android:name="net.formula97.fakegpbase.GunplaRegisterActivity"
             android:label="@string/title_activity_gunpla_register" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 
