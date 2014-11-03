@@ -23,8 +23,14 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
     private TextView tvModelNo;
     private TextView tvGunplaName;
 
+    private boolean mAlreadyShown = false;
+    private final String KeyAlreadyShown = "KeyAlreadyShown";
+
     protected NfcAdapter mNfcAdapter;
 
+    /**
+     * @see android.app.Activity#onCreate(android.os.Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +46,9 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
-
+    /**
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -48,6 +56,9 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         return true;
     }
 
+    /**
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -70,26 +81,37 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
 
     }
 
+    /**
+     * @see net.formula97.fakegpbase.fragments.MessageDialogs.DialogsButtonSelectionCallback#onButtonPressed(String, int)
+     */
     @Override
     public void onButtonPressed(String messageBody, int which) {
-        if (messageBody.equals(getString(R.string.wish_to_enable)) &&
-                which == MessageDialogs.PRESSED_POSITIVE) {
-            // 設定画面をstartActivityする
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-            } else {
-                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+        if (messageBody.equals(getString(R.string.wish_to_enable))) {
+            mAlreadyShown = true;
+
+            if (which == MessageDialogs.PRESSED_POSITIVE) {
+                // 設定画面をstartActivityする
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                } else {
+                    startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                }
             }
+        } else if (messageBody.equals(getString(R.string.no_nfc_present))) {
+            mAlreadyShown = true;
         }
     }
 
+    /**
+     * @see android.app.Activity#onResume()
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
         // NFCアダプターが有効でない場合は、設定画面を呼ぶか否かをDialogを表示する
         if (mNfcAdapter != null) {
-            if (!mNfcAdapter.isEnabled()) {
+            if (!mNfcAdapter.isEnabled() && !mAlreadyShown) {
                 MessageDialogs dialogs = MessageDialogs.getInstance(
                         getString(R.string.dialgo_info),
                         getString(R.string.wish_to_enable),
@@ -105,15 +127,20 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
                 mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
             }
         } else {
-            MessageDialogs dialogs = MessageDialogs.getInstance(
-                    getString(R.string.dialog_warn),
-                    getString(R.string.no_nfc_present),
-                    MessageDialogs.BUTTON_POSITIVE);
-            dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+            if (!mAlreadyShown) {
+                MessageDialogs dialogs = MessageDialogs.getInstance(
+                        getString(R.string.dialog_warn),
+                        getString(R.string.no_nfc_present),
+                        MessageDialogs.BUTTON_POSITIVE);
+                dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+            }
         }
 
     }
 
+    /**
+     * @see android.app.Activity#onPause()
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -124,6 +151,9 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         }
     }
 
+    /**
+     * @see android.app.Activity#onNewIntent(android.content.Intent)
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -131,5 +161,25 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         if ("android.nfc.action.NDEF_DISCOVERY".equals(intent.getAction())) {
             byte[] tagRawData = intent.getByteArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         }
+    }
+
+    /**
+     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(KeyAlreadyShown, mAlreadyShown);
+    }
+
+    /**
+     * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mAlreadyShown = savedInstanceState.getBoolean(KeyAlreadyShown);
     }
 }
