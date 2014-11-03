@@ -8,22 +8,33 @@ import com.j256.ormlite.misc.TransactionManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
+ * GunplaInfoテーブルを操作するDAOをもつModelクラス。<br />
  * Created by f97one on 14/11/02.
  */
 public class GunplaInfoModel {
 
     private DbHelper helper;
 
+    /**
+     * コンストラクタ。<br />
+     * DbHelperのインスタンスを取得する。
+     * @param context
+     */
     public GunplaInfoModel(Context context) {
         helper = DbHelper.getDatabase(context);
     }
 
+    /**
+     * 作成したガンプラ情報を保存する。
+     *
+     * @param gunplaInfoEntity 保存するガンプラ情報のエンティティ
+     */
     public void save(final GunplaInfo gunplaInfoEntity) {
         try {
             final Dao<GunplaInfo, Integer> dao = helper.getDao(GunplaInfo.class);
@@ -90,5 +101,45 @@ public class GunplaInfoModel {
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * 保存されているすべてのガンプラ情報を取得する。
+     *
+     * @return 保存されているすべてのガンプラ情報の
+     */
+    public List<GunplaInfo> findAll() {
+        List<GunplaInfo> infoList = new ArrayList<>(1);
+        try {
+            Dao<GunplaInfo, Integer> dao = helper.getDao(GunplaInfo.class);
+            infoList = dao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return infoList;
+    }
+
+    /**
+     * 指定したガンプラ情報を削除する。
+     *
+     * @param gunplaInfoEntity 削除するガンプラ情報のエンティティ
+     */
+    public void erase(final GunplaInfo gunplaInfoEntity) {
+        try {
+            final Dao<GunplaInfo, Integer> dao = helper.getDao(GunplaInfo.class);
+
+            TransactionManager.callInTransaction(
+                    dao.getConnectionSource(), new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    dao.delete(gunplaInfoEntity);
+
+                    return null;
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
