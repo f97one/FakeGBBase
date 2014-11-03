@@ -38,23 +38,6 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         tvGunplaName = (TextView) findViewById(R.id.tvGunplaName);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        // NFCアダプターが有効でない場合は、設定画面を呼ぶか否かをDialogを表示する
-        if (mNfcAdapter != null) {
-            if (!mNfcAdapter.isEnabled()) {
-                MessageDialogs dialogs = MessageDialogs.getInstance(
-                        getString(R.string.dialgo_info),
-                        getString(R.string.wish_to_enable),
-                        MessageDialogs.BUTTON_BOTH
-                );
-                dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
-            }
-        } else {
-            MessageDialogs dialogs = MessageDialogs.getInstance(
-                    getString(R.string.dialog_warn),
-                    getString(R.string.no_nfc_present),
-                    MessageDialogs.BUTTON_POSITIVE);
-            dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
-        }
     }
 
 
@@ -99,12 +82,31 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
     protected void onResume() {
         super.onResume();
 
-        // フォアグラウンドでのNFCタグ読み込みを開始
-        Intent i = new Intent(this, this.getClass());
-        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                getApplicationContext(), 0 ,i, PendingIntent.FLAG_UPDATE_CURRENT);
-        mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        // NFCアダプターが有効でない場合は、設定画面を呼ぶか否かをDialogを表示する
+        if (mNfcAdapter != null) {
+            if (!mNfcAdapter.isEnabled()) {
+                MessageDialogs dialogs = MessageDialogs.getInstance(
+                        getString(R.string.dialgo_info),
+                        getString(R.string.wish_to_enable),
+                        MessageDialogs.BUTTON_BOTH
+                );
+                dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+            } else {
+                // フォアグラウンドでのNFCタグ読み込みを開始
+                Intent i = new Intent(this, this.getClass());
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        getApplicationContext(), 0 ,i, PendingIntent.FLAG_UPDATE_CURRENT);
+                mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+            }
+        } else {
+            MessageDialogs dialogs = MessageDialogs.getInstance(
+                    getString(R.string.dialog_warn),
+                    getString(R.string.no_nfc_present),
+                    MessageDialogs.BUTTON_POSITIVE);
+            dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+        }
+
     }
 
     @Override
@@ -112,7 +114,9 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         super.onPause();
 
         // NFCタグ読み込みを中止
-        mNfcAdapter.disableForegroundDispatch(this);
+        if (mNfcAdapter != null) {
+            mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override
