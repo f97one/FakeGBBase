@@ -8,4 +8,7 @@
 
     <dimen name="gpbase_detail_horizontal_margin">48dp</dimen>
 
+    <dimen name="listview_horizontal_margin">8dp</dimen>
+    <dimen name="listview_vertical_margin">4dp</dimen>
+
 </resources>

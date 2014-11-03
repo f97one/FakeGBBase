@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/listview_horizontal_margin"
+    android:paddingRight="@dimen/listview_horizontal_margin"
+    android:paddingTop="@dimen/listview_vertical_margin"
+    android:paddingBottom="@dimen/listview_vertical_margin"
+    >
+
+    <TextView
+        android:id="@+id/listview_model_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:text="RX-78 GP-03S" />
+
+    <TextView
+        android:id="@+id/listview_gunpla_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/gpbase_text_margin"
+        android:ellipsize="end"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="DENDROBIUM STAMEN"/>
+</LinearLayout>
