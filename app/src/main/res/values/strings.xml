@@ -24,5 +24,6 @@
     <string name="operator_gpbase">OPERATOR</string>
     <string name="gunpla">GUNPLA</string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_gunpla_register">GunplaRegisterActivity</string>
 
 </resources>
