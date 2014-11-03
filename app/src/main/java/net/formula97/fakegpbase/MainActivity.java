@@ -50,19 +50,24 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(this, SettingActivity.class);
-            startActivity(i);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent setting = new Intent(this, SettingActivity.class);
+                startActivity(setting);
+                return true;
+            case R.id.action_register_gunpla:
+                Intent register = new Intent(this, GunplaRegisterActivity.class);
+                startActivity(register);
+                return true;
+            case R.id.action_select_gunpla:
+                // TODO ガンプラ選択のDialogFragmentを表示する処理を書く
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
