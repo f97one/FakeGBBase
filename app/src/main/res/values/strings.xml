@@ -13,6 +13,15 @@
     <string name="dialgo_info">Info</string>
     <string name="dialog_warn">Warning</string>
     <string name="wish_to_enable">NFC Feature isn\'t enabled.\nDo you wish to enable NFC feature?</string>
+    <string name="class_name">Class name</string>
+    <string name="scale_name">Scale name</string>
+    <string name="model_name">Model name</string>
+    <string name="gunpla_name">GUNPLA name</string>
+    <string name="scrach_built_level">Scratch built Level</string>
+    <string name="non_scratched">Non-Scratch built</string>
+    <string name="partial_scratched">Partial-Scratch built</string>
+    <string name="full_scratched">Full-Scratch built</string>
+
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
