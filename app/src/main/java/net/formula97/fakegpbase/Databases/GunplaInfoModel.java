@@ -42,6 +42,12 @@ public class GunplaInfoModel {
         }
     }
 
+    /**
+     * 指定したタグIDに一致するガンプラデータを取得する。
+     *
+     * @param tagId 指定するタグID
+     * @return 指定したタグIDに一致するガンプラデータ、一致しない場合はnullを返す
+     */
     public GunplaInfo findGunplaInfoByTagId(String tagId) {
         List<GunplaInfo> infos = null;
         try {
@@ -66,9 +72,8 @@ public class GunplaInfoModel {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        byte[] digestArray = digest.digest(sdf.format(calendar.getTime()).getBytes());
+        long now = Calendar.getInstance().getTimeInMillis();
+        byte[] digestArray = digest.digest(String.valueOf(now).getBytes());
 
         StringBuffer buffer = new StringBuffer();
 
