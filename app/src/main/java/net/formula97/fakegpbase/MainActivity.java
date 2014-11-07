@@ -7,10 +7,14 @@ import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.fragments.MessageDialogs;
 
 
@@ -25,6 +29,16 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
 
     private boolean mAlreadyShown = false;
     private final String KeyAlreadyShown = "KeyAlreadyShown";
+    private final String KeyGunplaInfoJson = "KeyGunplaInfoJson";
+
+    private String mBuilderName;
+    private String mFighterName;
+    private String mScaleVal;
+    private String mClassVal;
+    private String mModelNo;
+    private String mGunplaName;
+    private String mGunplaInfoJson;
+    private GunplaInfo gunplaInfo;
 
     protected NfcAdapter mNfcAdapter;
 
@@ -44,6 +58,8 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         tvGunplaName = (TextView) findViewById(R.id.tvGunplaName);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        initValiables();
     }
 
     /**
@@ -136,6 +152,12 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
             }
         }
 
+        tvBuilderName.setText(mBuilderName);
+        tvFighterName.setText(mFighterName);
+        tvClass.setText(mClassVal);
+        tvScale.setText(mScaleVal);
+        tvModelNo.setText(mModelNo);
+        tvGunplaName.setText(mGunplaName);
     }
 
     /**
@@ -171,6 +193,11 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(KeyAlreadyShown, mAlreadyShown);
+
+        // ウィジェット類の値格納
+        if (!TextUtils.isEmpty(mGunplaInfoJson)) {
+            outState.putString(KeyGunplaInfoJson, mGunplaInfoJson);
+        }
     }
 
     /**
@@ -181,5 +208,33 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         super.onRestoreInstanceState(savedInstanceState);
 
         mAlreadyShown = savedInstanceState.getBoolean(KeyAlreadyShown);
+
+        // ウィジェット類の値復元
+        mGunplaInfoJson = savedInstanceState.getString(KeyGunplaInfoJson);
+        if (!TextUtils.isEmpty(mGunplaInfoJson)) {
+            // JSONを保存していた場合は、JSONから変数の内容を復元する
+            Gson gson = new Gson();
+            gunplaInfo = gson.fromJson(mGunplaInfoJson, GunplaInfo.class);
+
+            mBuilderName = gunplaInfo.getBuilderName();
+            mFighterName = gunplaInfo.getFighterName();
+            mClassVal = gunplaInfo.getClassValue();
+            mScaleVal = gunplaInfo.getScaleValue();
+            mModelNo = gunplaInfo.getModelNo();
+            mGunplaName = gunplaInfo.getGunplaName();
+        }
+    }
+
+    /**
+     * Bundleに出入りする変数を初期化する。
+     */
+    private void initValiables() {
+        mBuilderName = "";
+        mFighterName = "";
+        mScaleVal = "";
+        mClassVal = "";
+        mModelNo = "";
+        mGunplaName = "";
+        mGunplaInfoJson = "";
     }
 }
