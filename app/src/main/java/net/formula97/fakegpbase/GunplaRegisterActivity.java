@@ -1,9 +1,11 @@
 package net.formula97.fakegpbase;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
+import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 
 import java.util.ArrayList;
@@ -49,11 +52,13 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private int mScratchSelected;
     private String mModelName;
     private String mGunplaName;
+    private String mTagId;
 
     private GunplaInfo mGunplaInfo;
     private ArrayAdapter<String> scaleAdapter;
     private ArrayAdapter<String> classAapter;
     private boolean isScaleSelected = true;
+    private boolean stopTagRead = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         mScratchSelected = 0;
         mModelName = "";
         mGunplaName = "";
+        mTagId = "";
 
         mGunplaInfo = new GunplaInfo();
     }
@@ -126,17 +132,19 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch(item.getItemId()) {
+            case R.id.action_submit:
+                // SQLiteへのデータセーブ
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return true;
+            case R.id.action_write_tag:
+                // NFCタグ書き込み
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -147,12 +155,32 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
         etRegisterBuilderName.setText(mBuiderName);
         etRegisterFighterName.setText(mFighterName);
+
+        // スケールとグレードは、保存している値とArrayAdapterにある値がマッチ
+        // しなかった時に、ArrayAdapterに値を挿入する
+        boolean matched = false;
+        for (int i = 0; i < scaleAdapter.getCount(); i++) {
+            if (mScaleVal.equals(scaleAdapter.getItem(i))) {
+                matched = true;
+                break;
+            }
+        }
+        if (!matched && !TextUtils.isEmpty(mScaleVal)) {
+            scaleAdapter.insert(mScaleVal, mScaleSelectedPos);
+        }
+
+        matched = false;
+        for (int i = 0; i < classAapter.getCount(); i++) {
+            if (mClassVal.equals(classAapter.getItem(i))) {
+                matched = true;
+                break;
+            }
+        }
+        if (!matched && !TextUtils.isEmpty(mClassVal)) {
+            classAapter.insert(mClassVal, mClassSelectedPos);
+        }
         spinnerScaleName.setSelection(mScaleSelectedPos, false);
         spinnerClassName.setSelection(mClassSelectedPos, false);
-        // RadioButtonは、先に全てオフにする
-        radioBtnNonScratch.setChecked(false);
-        radioBtnPartialScratch.setChecked(false);
-        radioBtnFullScratch.setChecked(false);
         switch (mScratchSelected) {
             case AppConst.NO_SCRATCH_BUILT:
                 radioBtnNonScratch.setChecked(true);
@@ -162,6 +190,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 break;
             case AppConst.FULL_SCRATCH_BUILT:
                 radioBtnFullScratch.setChecked(true);
+                break;
         }
         etRegisterModelName.setText(mModelName);
         etRegisterGunplaName.setText(mGunplaName);
@@ -219,5 +248,34 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             spinnerClassName.setSelection(mClassSelectedPos, false);
             classAapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    private GunplaInfo makeGunplaInfo(String tagId) {
+        GunplaInfo info = new GunplaInfo();
+
+        info.setBuilderName(etRegisterBuilderName.getText().toString());
+        info.setFighterName(etRegisterFighterName.getText().toString());
+        info.setClassValue((String) spinnerClassName.getSelectedItem());
+        info.setScaleValue((String) spinnerScaleName.getSelectedItem());
+        int scratch = 0;
+        if (radioBtnNonScratch.isChecked()) {
+            scratch = AppConst.NO_SCRATCH_BUILT;
+        } else if (radioBtnPartialScratch.isChecked()) {
+            scratch = AppConst.PARTIAL_SCRATCH_BUILT;
+        } else if (radioBtnFullScratch.isChecked()) {
+            scratch = AppConst.FULL_SCRATCH_BUILT;
+        }
+        info.setScratchBuiltLevel(scratch);
+        info.setModelNo(etRegisterModelName.getText().toString());
+        info.setGunplaName(etRegisterGunplaName.getText().toString());
+
+        info.setTagId(tagId);
+
+        return info;
     }
 }
