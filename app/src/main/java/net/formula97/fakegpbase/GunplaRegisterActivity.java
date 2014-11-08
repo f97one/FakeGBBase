@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.google.android.gms.ads.AdView;
 import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -159,10 +157,10 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             case AppConst.NO_SCRATCH_BUILT:
                 radioBtnNonScratch.setChecked(true);
                 break;
-            case AppConst.PATIAL_SCRATCH_BUILT:
+            case AppConst.PARTIAL_SCRATCH_BUILT:
                 radioBtnPartialScratch.setChecked(true);
                 break;
-            case AppConst.FULL_SCRTATCH_BUILT:
+            case AppConst.FULL_SCRATCH_BUILT:
                 radioBtnFullScratch.setChecked(true);
         }
         etRegisterModelName.setText(mModelName);
