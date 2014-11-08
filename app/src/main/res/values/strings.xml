@@ -26,6 +26,9 @@
     <string name="please_select">Please Select</string>
     <string name="no_gunpla_registered">No GUNPLA data registered.\nPlease register GUNPLA data before.</string>
     <string name="input_new">Please input new item</string>
+    <string name="save_data">Save</string>
+    <string name="read_tag">Read Tag</string>
+    <string name="write_tag">Write Tag</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
