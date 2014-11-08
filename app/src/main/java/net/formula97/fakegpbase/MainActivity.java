@@ -15,10 +15,16 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
+import net.formula97.fakegpbase.Databases.GunplaInfoModel;
+import net.formula97.fakegpbase.fragments.GunplaSelectionDialogs;
 import net.formula97.fakegpbase.fragments.MessageDialogs;
 
+import java.util.List;
 
-public class MainActivity extends Activity implements MessageDialogs.DialogsButtonSelectionCallback {
+
+public class MainActivity extends Activity
+        implements MessageDialogs.DialogsButtonSelectionCallback,
+        GunplaSelectionDialogs.OnGunplaSelectedListener {
 
     private TextView tvBuilderName;
     private TextView tvFighterName;
@@ -89,7 +95,19 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
                 return true;
             case R.id.action_select_gunpla:
                 // TODO ガンプラ選択のDialogFragmentを表示する処理を書く
-
+                GunplaInfoModel model = new GunplaInfoModel(this);
+                List<GunplaInfo> gunplaInfoList = model.findAll();
+                if (gunplaInfoList == null || gunplaInfoList.size() == 0) {
+                    // データ無しとして処理を中止する
+                    MessageDialogs dialogs = MessageDialogs.getInstance(
+                            getString(R.string.dialgo_info),
+                            getString(R.string.no_gunpla_registered),
+                            MessageDialogs.BUTTON_POSITIVE);
+                    dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+                } else {
+                    GunplaSelectionDialogs d = GunplaSelectionDialogs.newInstance();
+                    d.show(getFragmentManager(), GunplaSelectionDialogs.FRAGMENT_TAG);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -236,5 +254,27 @@ public class MainActivity extends Activity implements MessageDialogs.DialogsButt
         mModelNo = "";
         mGunplaName = "";
         mGunplaInfoJson = "";
+    }
+
+    @Override
+    public void onGunplaSelected(GunplaInfo info) {
+        Gson gson = new Gson();
+        mGunplaInfoJson = gson.toJson(info, GunplaInfo.class);
+
+        setViewFromEntity(info);
+    }
+
+    /**
+     * ローカルDBから取得したガンプラ情報を画面に反映する。
+     *
+     * @param info ローカルDBのがんプラ情報
+     */
+    private void setViewFromEntity(GunplaInfo info) {
+        tvBuilderName.setText(info.getBuilderName());
+        tvFighterName.setText(info.getFighterName());
+        tvScale.setText(info.getClassValue());
+        tvClass.setText(info.getClassValue());
+        tvModelNo.setText(info.getModelNo());
+        tvGunplaName.setText(info.getModelNo());
     }
 }

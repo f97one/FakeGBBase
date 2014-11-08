@@ -18,19 +18,35 @@ import java.util.EventListener;
 import java.util.List;
 
 /**
+ * ガンプラ選択用リスト表示Dialogを生成するDialogFragment。<br />
  * Created by f97one on 14/11/03.
  */
 public class GunplaSelectionDialogs extends DialogFragment {
 
+    /**
+     * DialogFragment検索用キー
+     */
     public static final String FRAGMENT_TAG = GunplaSelectionDialogs.class.getName()
             + AppConst.DIALOG_FRAGMENT_SUFFIX;
 
     private OnGunplaSelectedListener mListener;
 
+    /**
+     * ガンプラ選択を通知するコールバックリスナ。
+     */
     public interface OnGunplaSelectedListener extends EventListener {
+        /**
+         * リストのガンプラが選択された時に呼び出される。
+         *
+         * @param info ローカルDBのガンプラ情報
+         */
         public void onGunplaSelected(GunplaInfo info);
     }
 
+    /**
+     * デフォルトコンストラクタ。<br />
+     * システムの要求により、空のデフォルトコンストラクタとなっている。
+     */
     public GunplaSelectionDialogs() { }
 
     public static GunplaSelectionDialogs newInstance() {
