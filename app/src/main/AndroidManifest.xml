@@ -34,12 +34,13 @@
         </activity>
         <activity
             android:name="net.formula97.fakegpbase.SettingActivity"
-            android:label="@string/title_activity_setting" >
+            android:label="@string/action_settings" >
         </activity>
         <activity
             android:name="net.formula97.fakegpbase.GunplaRegisterActivity"
-            android:label="@string/title_activity_gunpla_register"
-            android:theme="@android:style/Theme.Holo" >
+            android:label="@string/register_gunpla"
+            android:theme="@android:style/Theme.Holo"
+            android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERY" />
 
