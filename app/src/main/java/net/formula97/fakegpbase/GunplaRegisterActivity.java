@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,7 @@ import java.util.List;
 
 
 public class GunplaRegisterActivity extends Activity implements AdapterView.OnItemSelectedListener,
-        NewItemDialog.OnInputCompleteListener {
+        NewItemDialog.OnInputCompleteListener, WriteTagDialogs.OnTagOperationListener {
 
     private EditText etRegisterBuilderName;
     private EditText etRegisterFighterName;
@@ -140,6 +141,8 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 return true;
             case R.id.action_write_tag:
                 // NFCタグ書き込みのダイアログを出す
+                // タグ読み込み中止フラグを立てる
+                stopTagRead = true;
                 WriteTagDialogs writeTagDialogs = new WriteTagDialogs();
                 writeTagDialogs.show(getFragmentManager(), WriteTagDialogs.FRAGMENT_TAG);
                 return true;
@@ -278,5 +281,27 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         info.setTagId(tagId);
 
         return info;
+    }
+
+    @Override
+    public void onTagOperation(int operationCode) {
+        String logtag = this.getClass().getSimpleName() + "#onTagOperation";
+        String result = "";
+        switch (operationCode) {
+            case WriteTagDialogs.OPERATION_SUCCESS:
+                result = "OPERATION_SUCCESS";
+                break;
+            case WriteTagDialogs.OPERATION_FAILED:
+                result = "OPERATION_FAILED";
+                break;
+            case WriteTagDialogs.OPERATION_CANCELED:
+                result = "OPERATION_CANCELED";
+                break;
+        }
+
+        Log.i(logtag, "Received : " + result);
+
+        // タグ読み込み中止を取りやめ
+        stopTagRead = false;
     }
 }
