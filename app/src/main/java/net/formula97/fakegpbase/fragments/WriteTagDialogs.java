@@ -79,6 +79,11 @@ public class WriteTagDialogs extends DialogFragment {
                 .setTitle(getString(R.string.write_tag))
                 .setMessage(R.string.please_touch);
 
-        return builder.create();
+        // [Back]でキャンセルできるようにするが、
+        // Dialogの外側を叩いてもキャンセルできないようにする
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+
+        return dialog;
     }
 }
