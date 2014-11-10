@@ -29,6 +29,7 @@
     <string name="save_data">Save</string>
     <string name="read_tag">Read Tag</string>
     <string name="write_tag">Write Tag</string>
+    <string name="please_touch">Please touch the tag to write the GUNPLA info.</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
