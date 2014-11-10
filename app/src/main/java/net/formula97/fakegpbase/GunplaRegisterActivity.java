@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdView;
 import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
+import net.formula97.fakegpbase.fragments.WriteTagDialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -138,9 +139,9 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
                 return true;
             case R.id.action_write_tag:
-                // NFCタグ書き込み
-
-
+                // NFCタグ書き込みのダイアログを出す
+                WriteTagDialogs writeTagDialogs = new WriteTagDialogs();
+                writeTagDialogs.show(getFragmentManager(), WriteTagDialogs.FRAGMENT_TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -238,7 +239,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     }
 
     @Override
-    public void onInputComplered(String inputItem) {
+    public void onInputCompleted(String inputItem) {
         if (isScaleSelected) {
             scaleAdapter.insert(inputItem, mScaleSelectedPos);
             spinnerScaleName.setSelection(mScaleSelectedPos, false);

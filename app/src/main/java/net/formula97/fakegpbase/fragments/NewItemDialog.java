@@ -16,28 +16,35 @@ import net.formula97.fakegpbase.R;
 import java.util.EventListener;
 
 /**
+ * アイテム追加用DialogFragment。<br />
  * Created by f97one on 14/11/08.
  */
 public class NewItemDialog extends DialogFragment {
 
+    /**
+     * Fragment特定用のタグ
+     */
     public static final String FRAGMENT_TAG = NewItemDialog.class.getName() + AppConst.DIALOG_FRAGMENT_SUFFIX;
+    /**
+     * DialogFragmentにセットしているEditTextのResId
+     */
     public static final int EDITTEXT_ID = 0x7fff1001;
 
-    // アイテム入力終了を通知するイベントリスナ。
+    /**
+     * アイテム入力終了を通知するイベントリスナ。
+     */
     public interface OnInputCompleteListener extends EventListener {
         /**
          * アイテム入力終了後に呼び出される。
          *
          * @param inputItem 入力したアイテム
          */
-        public void onInputComplered(String inputItem);
+        public void onInputCompleted(String inputItem);
     }
 
     private OnInputCompleteListener mListener;
 
-    public NewItemDialog() {
-
-    }
+    public NewItemDialog() { }
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,7 +66,7 @@ public class NewItemDialog extends DialogFragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (mListener != null) {
-                        mListener.onInputComplered(et.getText().toString());
+                        mListener.onInputCompleted(et.getText().toString());
                     }
                     getDialog().dismiss();
                     return true;
