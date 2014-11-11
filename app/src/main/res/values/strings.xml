@@ -13,6 +13,7 @@
     <string name="dialgo_info">Info</string>
     <string name="dialog_warn">Warning</string>
     <string name="wish_to_enable">NFC Feature isn\'t enabled.\nDo you wish to enable NFC feature?</string>
+    <string name="nfc_not_enabled">NFC Feature isn\'t enabled.</string>
     <string name="class_name">Class name</string>
     <string name="scale_name">Scale name</string>
     <string name="model_name">Model name</string>

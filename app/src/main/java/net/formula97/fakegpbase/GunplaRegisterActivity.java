@@ -3,6 +3,7 @@ package net.formula97.fakegpbase;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -56,6 +58,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private String mGunplaName;
     private String mTagId;
 
+    private NfcAdapter nfcAdapter;
     private GunplaInfo mGunplaInfo;
     private ArrayAdapter<String> scaleAdapter;
     private ArrayAdapter<String> classAapter;
@@ -88,6 +91,9 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         classAapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClassName.setAdapter(classAapter);
         spinnerClassName.setOnItemSelectedListener(this);
+
+        // NFC Adapterの初期化
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
     private void initView() {
@@ -143,8 +149,13 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 // NFCタグ書き込みのダイアログを出す
                 // タグ読み込み中止フラグを立てる
                 stopTagRead = true;
-                WriteTagDialogs writeTagDialogs = new WriteTagDialogs();
-                writeTagDialogs.show(getFragmentManager(), WriteTagDialogs.FRAGMENT_TAG);
+                if (nfcAdapter != null && nfcAdapter.isEnabled()) {
+                    WriteTagDialogs writeTagDialogs = new WriteTagDialogs();
+                    writeTagDialogs.show(getFragmentManager(), WriteTagDialogs.FRAGMENT_TAG);
+                } else {
+                    Toast.makeText(this, getString(R.string.nfc_not_enabled), Toast.LENGTH_LONG).show();
+                    stopTagRead = false;
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -257,6 +268,16 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
+        String action = intent.getAction();
+        if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            if (stopTagRead) {
+                // 書き込みモードの処理
+                // 一旦タグを読み込み
+            } else {
+
+            }
+        }
     }
 
     private GunplaInfo makeGunplaInfo(String tagId) {
