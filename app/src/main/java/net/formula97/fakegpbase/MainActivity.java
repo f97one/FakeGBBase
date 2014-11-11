@@ -46,7 +46,7 @@ public class MainActivity extends Activity
     private String mGunplaInfoJson;
     private GunplaInfo gunplaInfo;
 
-    protected NfcAdapter mNfcAdapter;
+    private NfcAdapter mNfcAdapter;
 
     /**
      * @see android.app.Activity#onCreate(android.os.Bundle)
