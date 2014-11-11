@@ -1,6 +1,7 @@
 package net.formula97.fakegpbase;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
@@ -23,7 +24,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
-import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 import net.formula97.fakegpbase.fragments.WriteTagDialogs;
 
@@ -58,7 +58,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private String mGunplaName;
     private String mTagId;
 
-    private NfcAdapter nfcAdapter;
+    private NfcAdapter mNfcAdapter;
     private GunplaInfo mGunplaInfo;
     private ArrayAdapter<String> scaleAdapter;
     private ArrayAdapter<String> classAapter;
@@ -93,7 +93,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         spinnerClassName.setOnItemSelectedListener(this);
 
         // NFC Adapterの初期化
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
     private void initView() {
@@ -149,7 +149,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 // NFCタグ書き込みのダイアログを出す
                 // タグ読み込み中止フラグを立てる
                 stopTagRead = true;
-                if (nfcAdapter != null && nfcAdapter.isEnabled()) {
+                if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
                     WriteTagDialogs writeTagDialogs = new WriteTagDialogs();
                     writeTagDialogs.show(getFragmentManager(), WriteTagDialogs.FRAGMENT_TAG);
                 } else {
@@ -209,6 +209,15 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         }
         etRegisterModelName.setText(mModelName);
         etRegisterGunplaName.setText(mGunplaName);
+
+        // NFCの読み込みを有効にする
+        if (mNfcAdapter != null && !mNfcAdapter.isEnabled()) {
+            Intent i = new Intent(this, this.getClass());
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    getApplicationContext(), 0 ,i, PendingIntent.FLAG_UPDATE_CURRENT);
+            mNfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        }
     }
 
     @Override
@@ -216,6 +225,10 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         super.onPause();
 
         adView2.pause();
+
+        if (mNfcAdapter != null) {
+            mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override
