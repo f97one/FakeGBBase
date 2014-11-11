@@ -18,4 +18,8 @@ public class AppConst {
     public static final String PREF_KEY_BUILDER_NAME = "builder_name";
     public static final String PREF_KEY_FIGHTER_NAME = "fighter_name";
     public static final String PREF_KEY_USE_WAKE_LOCK_TAG = "use_tag_for_wake_lock";
+
+    public static final String CHARSET_US_ASCII = "US-ASCII";
+    public static final String CHARSET_UTF8 = "UTF-8";
+    public static final String CHARSET_UTF16 = "UTF-16";
 }
