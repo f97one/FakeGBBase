@@ -3,9 +3,13 @@ package net.formula97.fakegpbase;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -19,7 +23,10 @@ import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.GunplaSelectionDialogs;
 import net.formula97.fakegpbase.fragments.MessageDialogs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends Activity
@@ -198,9 +205,57 @@ public class MainActivity extends Activity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if ("android.nfc.action.NDEF_DISCOVERY".equals(intent.getAction())) {
-            byte[] tagRawData = intent.getByteArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // FLAG_ACTIVITY_LAUNCHED_FROM_HISTORYが立っている時だけ処理
+        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+            if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+                // 登録済みタグ（＝フォーマット済みNFCを含む）の場合のみ処理
+                readTag(intent);
+            }
         }
+    }
+
+    private void readTag(Intent i) {
+        if (i != null) {
+            Parcelable[] parcelables = i.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+            NfcUtils nfcUtils = new NfcUtils();
+            GunplaInfoModel model = new GunplaInfoModel(this);
+
+            if (parcelables != null) {
+                for (Parcelable p : parcelables) {
+                    NdefMessage msg = (NdefMessage) p;
+                    NdefRecord[] records = msg.getRecords();
+
+                    for (NdefRecord record : records) {
+                        try {
+                            NfcTextRecord nfcTextRecord = nfcUtils.parse(record);
+                            gunplaInfo = model.findGunplaInfoByTagId(nfcTextRecord.getText());
+
+                            if (gunplaInfo != null) {
+                                setGunplaInfo(gunplaInfo);
+                                return;
+                            }
+
+                        } catch (FormatException e) {
+                            if (BuildConfig.DEBUG) {
+                                // デバッグ時のみStackTraceを流す
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void setGunplaInfo(GunplaInfo gunplaInfo) {
+        // GSONでJSON化して保管する
+        Gson gson = new Gson();
+        mGunplaInfoJson = gson.toJson(gunplaInfo, GunplaInfo.class);
+
+        setToFields(gunplaInfo);
+
     }
 
     /**
@@ -234,13 +289,17 @@ public class MainActivity extends Activity
             Gson gson = new Gson();
             gunplaInfo = gson.fromJson(mGunplaInfoJson, GunplaInfo.class);
 
-            mBuilderName = gunplaInfo.getBuilderName();
-            mFighterName = gunplaInfo.getFighterName();
-            mClassVal = gunplaInfo.getClassValue();
-            mScaleVal = gunplaInfo.getScaleValue();
-            mModelNo = gunplaInfo.getModelNo();
-            mGunplaName = gunplaInfo.getGunplaName();
+            setToFields(gunplaInfo);
         }
+    }
+
+    private void setToFields(GunplaInfo gunplaInfoEntity) {
+        mBuilderName = gunplaInfoEntity.getBuilderName();
+        mFighterName = gunplaInfoEntity.getFighterName();
+        mClassVal = gunplaInfoEntity.getClassValue();
+        mScaleVal = gunplaInfoEntity.getScaleValue();
+        mModelNo = gunplaInfoEntity.getModelNo();
+        mGunplaName = gunplaInfoEntity.getGunplaName();
     }
 
     /**
@@ -254,6 +313,7 @@ public class MainActivity extends Activity
         mModelNo = "";
         mGunplaName = "";
         mGunplaInfoJson = "";
+        gunplaInfo = null;
     }
 
     @Override
@@ -267,7 +327,7 @@ public class MainActivity extends Activity
     /**
      * ローカルDBから取得したガンプラ情報を画面に反映する。
      *
-     * @param info ローカルDBのがんプラ情報
+     * @param info ローカルDBのガンプラ情報
      */
     private void setViewFromEntity(GunplaInfo info) {
         tvBuilderName.setText(info.getBuilderName());
