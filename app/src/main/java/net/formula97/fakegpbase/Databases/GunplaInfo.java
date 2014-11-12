@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * がんプラ情報を保持するDTO。
+ * ガンプラ情報を保持するDTO。<br />
  * Created by f97one on 14/11/02.
  */
 @DatabaseTable(tableName = "GunplaInfo")
@@ -16,39 +16,48 @@ public class GunplaInfo {
      */
     public static final String TABLE_NAME = GunplaInfo.class.getSimpleName();
     /**
-     * フィールド:_id
+     * フィールド:_id<br />
+     * AndroidのAPIが要求する場合があるため、用意している一貫番号。
      */
     public static final String FIELD__ID = "_id";
     /**
-     * フィールド:tagId
+     * フィールド:tagId<br />
+     * NFCタグに書き込んでいる一意のID、NFCタグを使用していない場合は、先頭に「NOTAG_」が付加されている。
      */
     public static final String FIELD_TAG_ID = "tagId";
     /**
-     * フィールド:gunplaName
+     * フィールド:gunplaName<br />
+     * ガンプラの名称。
      */
     public static final String FIELD_GUNPLA_NAME = "gunpla_name";
     /**
-     * フィールド:scaleValue
+     * フィールド:scaleValue<br />
+     * ガンプラのスケール。
      */
     public static final String FIELD_SCALE_VALUE = "scaleValue";
     /**
-     * フィールド:classValue
+     * フィールド:classValue<br />
+     * ガンプラのグレード（MG、HGなど）。
      */
     public static final String FIELD_CLASS_VALUE = "classValue";
     /**
-     * フィールド:scratchBuiltLevel
+     * フィールド:scratchBuiltLevel<BR />
+     * 改造、またはスクラッチビルドの程度を表す、0=改造なし、1=一部、2=すべて。
      */
     public static final String FIELD_SCRATCH_BUILT_LEVEL = "scratchBuiltLevel";
     /**
-     * フィールド:modelNo
+     * フィールド:modelNo<br />
+     * ガンプラの型式。
      */
     public static final String FIELD_MODEL_NO = "modelNo";
     /**
-     * フィールド:builderName
+     * フィールド:builderName<br />
+     * ガンプラのビルダー名。
      */
     public static final String FIELD_BUILDER_NAME = "builderName";
     /**
-     * フィールド:fighterName
+     * フィールド:fighterName<br />
+     * ガンプラのファイター名。
      */
     public static final String FIELD_FIGHTER_NAME = "fighterName";
 
@@ -73,7 +82,7 @@ public class GunplaInfo {
 
     /**
      * デフォルトコンストラクタ。<br />
-     * 依存ライブラリが必要とするため、実装はからとしている。
+     * 依存ライブラリが必要とするため、実装は空としている。
      */
     public GunplaInfo() { }
 
@@ -148,4 +157,5 @@ public class GunplaInfo {
     public void setFighterName(String fighterName) {
         this.fighterName = fighterName;
     }
+
 }
