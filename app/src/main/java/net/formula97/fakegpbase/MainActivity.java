@@ -101,7 +101,7 @@ public class MainActivity extends Activity
                 startActivity(register);
                 return true;
             case R.id.action_select_gunpla:
-                // TODO ガンプラ選択のDialogFragmentを表示する処理を書く
+                // ガンプラ選択のDialogFragmentを表示する
                 GunplaInfoModel model = new GunplaInfoModel(this);
                 List<GunplaInfo> gunplaInfoList = model.findAll();
                 if (gunplaInfoList == null || gunplaInfoList.size() == 0) {
@@ -209,12 +209,20 @@ public class MainActivity extends Activity
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
             if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
                 // 登録済みタグ（＝フォーマット済みNFCを含む）の場合のみ処理
-                readTag(intent);
+                setGunplaInfo(readTag(intent));
             }
         }
     }
 
-    private void readTag(Intent i) {
+    /**
+     * NFCタグのTEXTレコードからガンプラ情報を取得する。
+     *
+     * @param i NFCタグ読み取りのIntent
+     * @return 検索結果のガンプラ情報、ヒットしなかった場合はnullを返す
+     */
+    private GunplaInfo readTag(Intent i) {
+        GunplaInfo info = null;
+
         if (i != null) {
             Parcelable[] parcelables = i.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 
@@ -229,11 +237,10 @@ public class MainActivity extends Activity
                     for (NdefRecord record : records) {
                         try {
                             NfcTextRecord nfcTextRecord = nfcUtils.parse(record);
-                            gunplaInfo = model.findGunplaInfoByTagId(nfcTextRecord.getText());
+                            info = model.findGunplaInfoByTagId(nfcTextRecord.getText());
 
-                            if (gunplaInfo != null) {
-                                setGunplaInfo(gunplaInfo);
-                                return;
+                            if (info != null) {
+                                break;
                             }
 
                         } catch (FormatException e) {
@@ -247,15 +254,22 @@ public class MainActivity extends Activity
                 }
             }
         }
+        return info;
     }
 
+    /**
+     * ガンプラ情報をフィールドに格納する。
+     *
+     * @param gunplaInfo
+     */
     private void setGunplaInfo(GunplaInfo gunplaInfo) {
         // GSONでJSON化して保管する
         Gson gson = new Gson();
+        this.gunplaInfo = gunplaInfo;
         mGunplaInfoJson = gson.toJson(gunplaInfo, GunplaInfo.class);
 
         setToFields(gunplaInfo);
-
+        setViewFromEntity(gunplaInfo);
     }
 
     /**
@@ -293,6 +307,11 @@ public class MainActivity extends Activity
         }
     }
 
+    /**
+     * ガンプラ情報から画面情報保持メンバー変数に値を格納する。
+     *
+     * @param gunplaInfoEntity
+     */
     private void setToFields(GunplaInfo gunplaInfoEntity) {
         mBuilderName = gunplaInfoEntity.getBuilderName();
         mFighterName = gunplaInfoEntity.getFighterName();
