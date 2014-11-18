@@ -1,11 +1,15 @@
 package net.formula97.fakegpbase;
 
+import android.content.Intent;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -72,6 +76,8 @@ public class NfcUtils {
         return rec;
     }
 
+
+
     /**
      * バイト配列を連結する。
      *
@@ -122,6 +128,13 @@ public class NfcUtils {
         return  repLf;
     }
 
+    /**
+     * NFCタグのレコードがTEXTレコードか否かを判断し、TEXTレコードを取得する。
+     *
+     * @param parseRec NFCタグから読み取ったNDEFレコード
+     * @return NDEFレコードの中にあるTEXTレコード、読み込みに失敗した場合はnull
+     * @throws FormatException
+     */
     public NfcTextRecord parse(NdefRecord parseRec) throws FormatException {
 
         // TNF_WELL_KNOWNでない場合は例外を投げる
@@ -158,6 +171,52 @@ public class NfcUtils {
         }
     }
 
+    /**
+     * 読み取ったNFCタグからTEXTレコードを読み出す。
+     *
+     * @param intent NFCタグを読み取った時のIntent
+     * @return NFCタグのTEXTレコード、TEXTレコードがない場合はnull
+     */
+    public NfcTextRecord readTag(Intent intent) {
+        NfcTextRecord txt = null;
+
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+        if (parcelables != null) {
+            for (Parcelable p : parcelables) {
+                NdefMessage msg = (NdefMessage) p;
+                NdefRecord[] records = msg.getRecords();
+
+                for (NdefRecord record : records) {
+                    try {
+                        txt = parse(record);
+
+                        if (!TextUtils.isEmpty(txt.getText())
+                                && !TextUtils.isEmpty(txt.getLanguageCode())
+                                && txt.isEncodeUtf8() != null ) {
+                            // 中身が詰まっている時だけbreak
+                            break;
+                        }
+
+                    } catch (FormatException e) {
+                        if (BuildConfig.DEBUG) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        return txt;
+    }
+
+    /**
+     * NFCタグにデータを書き込む。
+     *
+     * @param tag 書き込み対象のNFCタグ
+     * @param msg 書き込むNdefMessage
+     * @param callback 書き込み終了を通知するコールバック
+     */
     public void writeTag(Tag tag, NdefMessage msg, OnWroteCallback callback) {
         try {
             if (tag == null) {
