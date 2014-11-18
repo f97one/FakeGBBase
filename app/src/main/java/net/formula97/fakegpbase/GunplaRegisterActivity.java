@@ -1,10 +1,15 @@
 package net.formula97.fakegpbase;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -24,6 +29,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
+import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 import net.formula97.fakegpbase.fragments.WriteTagDialogs;
 
@@ -64,6 +70,8 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private ArrayAdapter<String> classAapter;
     private boolean isScaleSelected = true;
     private boolean stopTagRead = false;
+    private Tag mReadTag;
+    private NdefMessage mNdefMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +136,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         mTagId = "";
 
         mGunplaInfo = new GunplaInfo();
+        mReadTag = null;
     }
 
 
@@ -282,17 +291,62 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        String action = intent.getAction();
-        if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
-            if (stopTagRead) {
-                // 書き込みモードの処理
-                // 一旦タグを読み込み
-            } else {
+        GunplaInfoModel model = new GunplaInfoModel(this);
+        // 初期タグIDの生成
+        String initialTagId = model.makeInitialTagId();
 
+        String action = intent.getAction();
+        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+            NfcUtils utils = new NfcUtils();
+            NfcTextRecord record = null;
+            GunplaInfo savedInfo = null;
+
+            // 書き込み対象タグを保管
+            mReadTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+                if (stopTagRead) {
+                    // 書き込みモードの処理
+                    // 一旦タグを読み込み
+                    record = utils.readTag(intent);
+                    if (record != null) {
+                        savedInfo = model.findGunplaInfoByTagId(record.getText());
+                        if (savedInfo != null) {
+                            // 「すでにNFCタグがガンプラと紐付けられているので、上書きしてよいか？」と確認する
+                        }
+                    } else {
+                        // 「TXTレコードがすでにあるが上書きしてよいか？」と確認する
+                    }
+
+                } else {
+                    // 読み込みモード
+                    record = utils.readTag(intent);
+                    if (record != null) {
+                        savedInfo = model.findGunplaInfoByTagId(record.getText());
+                        if (savedInfo != null) {
+                            // 「すでにNFCタグがガンプラと紐付けられているので、上書きしてよいか？」と確認する
+                        }
+                    }
+
+                }
+            } else if (action.equals(NfcAdapter.ACTION_TECH_DISCOVERED) && stopTagRead) {
+                // 未使用タグ、かつ書き込みモードの場合は、そのまま書き込み処理に入る
+                mTagId = initialTagId;
+                NdefRecord[] ndefRecords = new NdefRecord[]{
+                        utils.toNdefRecord("ja-JP", mTagId, true)
+                };
+                NdefMessage ndefMessage = new NdefMessage(ndefRecords);
+                utils.writeTag(mReadTag, ndefMessage, wroteCompCallbacks);
             }
         }
     }
 
+    /**
+     * ウィジェットの入力値から、ガンプラ情報を作成する。
+     *
+     * @param tagId NFCタグに書き込んでいるタグID
+     * @return ガンプラ情報のインスタンス
+     */
     private GunplaInfo makeGunplaInfo(String tagId) {
         GunplaInfo info = new GunplaInfo();
 
@@ -338,4 +392,21 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         // タグ読み込み中止を取りやめ
         stopTagRead = false;
     }
+
+    private NfcUtils.OnWroteCallback wroteCompCallbacks = new NfcUtils.OnWroteCallback() {
+        @Override
+        public void onSuccess() {
+            GunplaInfo info = makeGunplaInfo(mTagId);
+            GunplaInfoModel model = new GunplaInfoModel(GunplaRegisterActivity.this);
+            model.save(info);
+
+            DialogFragment f = (DialogFragment) getFragmentManager().findFragmentByTag(WriteTagDialogs.FRAGMENT_TAG);
+            f.dismiss();
+        }
+
+        @Override
+        public void onFailed(String errorMessage, Throwable e) {
+            Toast.makeText(GunplaRegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    };
 }
