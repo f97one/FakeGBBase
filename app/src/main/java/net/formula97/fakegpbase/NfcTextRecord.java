@@ -1,7 +1,5 @@
 package net.formula97.fakegpbase;
 
-import android.nfc.NdefRecord;
-
 /**
  * NFC TEXTレコードを保持するDTOクラス。<br />
  * Created by f97one on 14/11/11.
@@ -10,11 +8,11 @@ public class NfcTextRecord {
 
     private String mText;
     private String mLanguageCode;
-    private boolean mEncodeUtf8;
+    private Boolean mEncodeUtf8;
 
     public NfcTextRecord() { }
 
-    public NfcTextRecord(String text, String languageCode, boolean encodeUtf8) {
+    public NfcTextRecord(String text, String languageCode, Boolean encodeUtf8) {
         this.mText = text;
         this.mLanguageCode = languageCode;
         this.mEncodeUtf8 = encodeUtf8;
@@ -28,7 +26,7 @@ public class NfcTextRecord {
         return this.mLanguageCode;
     }
 
-    public boolean isEncodeUtf8() {
+    public Boolean isEncodeUtf8() {
         return this.mEncodeUtf8;
     }
 
@@ -40,7 +38,7 @@ public class NfcTextRecord {
         this.mLanguageCode = languageCode;
     }
 
-    public void setEncodeUtf8(boolean encodeUtf8) {
+    public void setEncodeUtf8(Boolean encodeUtf8) {
         this.mEncodeUtf8 = encodeUtf8;
     }
 }
