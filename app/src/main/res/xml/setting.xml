@@ -9,9 +9,11 @@
         android:key="fighter_name"
         android:inputType="textEmailAddress"
         android:title="@string/fighter_name"/>
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="use_tag_for_wake_lock"
         android:defaultValue="false"
-        android:title="@string/use_tag" />
+        android:title="@string/sleep_deterrent"
+        android:summaryOn="@string/use_tag"
+        android:summaryOff="@string/dont_suppress_sleep"/>
 
 </PreferenceScreen>

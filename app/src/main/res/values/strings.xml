@@ -7,7 +7,9 @@
     <string name="action_settings">Settings</string>
     <string name="builder_name">Builder name</string>
     <string name="fighter_name">Fighter name</string>
+    <string name="sleep_deterrent">Sleep deterrent</string>
     <string name="use_tag">Use NFC tag for sleep deterrent</string>
+    <string name="dont_suppress_sleep">Don\'t suppress the sleep of the device</string>
     <string name="other">other</string>
     <string name="no_nfc_present">No NFC Feature present.\nPlease choose your GUNPLA manually.</string>
     <string name="dialgo_info">Info</string>
