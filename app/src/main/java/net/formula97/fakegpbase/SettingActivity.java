@@ -2,12 +2,9 @@ package net.formula97.fakegpbase;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 
 public class SettingActivity extends Activity {
@@ -23,29 +20,6 @@ public class SettingActivity extends Activity {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_setting, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -58,6 +32,28 @@ public class SettingActivity extends Activity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.setting);
+
+            // 入力制限フィルタの定義
+            // ※正確には入力制限ではないが、挙動的に入力制限になっている
+            EditTextPreference builderName = (EditTextPreference) findPreference("builder_name");
+            EditTextPreference fighterName = (EditTextPreference) findPreference("fighter_name");
+            builderName.setOnPreferenceChangeListener(listener);
+            fighterName.setOnPreferenceChangeListener(listener);
         }
+
+        private Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String edited = newValue.toString();
+
+                // フィルタの正規表現にマッチした時だけOKと
+                if (edited.matches(AppConst.INPUT_FILTER_ALL_CAPS_WITH_NUMBER)) {
+                    preference.setSummary(edited);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
     }
 }

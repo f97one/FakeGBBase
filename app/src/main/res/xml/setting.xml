@@ -2,12 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
         android:key="builder_name"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:title="@string/builder_name"
         />
     <EditTextPreference
         android:key="fighter_name"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:title="@string/fighter_name"/>
     <CheckBoxPreference
         android:key="use_tag_for_wake_lock"

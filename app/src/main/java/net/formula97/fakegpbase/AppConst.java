@@ -22,4 +22,6 @@ public class AppConst {
     public static final String CHARSET_US_ASCII = "US-ASCII";
     public static final String CHARSET_UTF8 = "UTF-8";
     public static final String CHARSET_UTF16 = "UTF-16";
+
+    public static final String INPUT_FILTER_ALL_CAPS_WITH_NUMBER = "^[A-Za-z0-9./ ]+$";
 }
