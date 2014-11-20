@@ -9,6 +9,12 @@
         android:icon="@android:drawable/ic_menu_save"
         android:showAsAction="always|withText" />
     <item
+        android:id="@+id/action_reset_view"
+        android:title="@string/init_data"
+        android:orderInCategory="99"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:showAsAction="always|withText" />
+    <item
         android:id="@+id/action_write_tag"
         android:title="@string/write_tag"
         android:icon="@android:drawable/ic_menu_manage"
