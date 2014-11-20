@@ -15,9 +15,15 @@
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:showAsAction="always|withText" />
     <item
+        android:id="@+id/action_edit"
+        android:title="@string/edit_data"
+        android:orderInCategory="98"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="always|withText" />
+    <item
         android:id="@+id/action_write_tag"
         android:title="@string/write_tag"
         android:icon="@android:drawable/ic_menu_manage"
-        android:orderInCategory="98"
+        android:orderInCategory="97"
         android:showAsAction="always|withText" />
 </menu>
