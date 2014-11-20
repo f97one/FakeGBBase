@@ -29,6 +29,7 @@ import com.google.android.gms.ads.AdView;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.Databases.GunplaInfoModel;
+import net.formula97.fakegpbase.fragments.MessageDialogs;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 import net.formula97.fakegpbase.fragments.WriteTagDialogs;
 
@@ -38,7 +39,7 @@ import java.util.List;
 
 
 public class GunplaRegisterActivity extends Activity implements AdapterView.OnItemSelectedListener,
-        NewItemDialog.OnInputCompleteListener, WriteTagDialogs.OnTagOperationListener {
+        NewItemDialog.OnInputCompleteListener, WriteTagDialogs.OnTagOperationListener, MessageDialogs.DialogsButtonSelectionCallback {
 
     private EditText etRegisterBuilderName;
     private EditText etRegisterFighterName;
@@ -174,6 +175,14 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                     Toast.makeText(this, getString(R.string.nfc_not_enabled), Toast.LENGTH_LONG).show();
                     stopTagRead = false;
                 }
+                return true;
+            case R.id.action_reset_view:
+                // UIの値を初期化する
+                MessageDialogs dialogs = MessageDialogs.getInstance(
+                        getString(R.string.dialgo_info),
+                        getString(R.string.confirm_init_data),
+                        MessageDialogs.BUTTON_BOTH);
+                dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -463,4 +472,24 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             Toast.makeText(GunplaRegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
         }
     };
+
+    @Override
+    public void onButtonPressed(String messageBody, int which) {
+        if (messageBody.equals(getString(R.string.confirm_init_data))) {
+            if (which == MessageDialogs.PRESSED_POSITIVE) {
+                // 表示を初期化する
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                etRegisterBuilderName.setText(preferences.getString(AppConst.PREF_KEY_BUILDER_NAME, ""));
+                etRegisterFighterName.setText(preferences.getString(AppConst.PREF_KEY_FIGHTER_NAME, ""));
+                spinnerClassName.setSelection(0, false);
+                spinnerScaleName.setSelection(0, false);
+                radioBtnNonScratch.setChecked(true);
+                etRegisterModelName.setText("");
+                etRegisterGunplaName.setText("");
+
+                // タグIDを初期化
+                mTagId = "";
+            }
+        }
+    }
 }
