@@ -351,9 +351,9 @@ public class MainActivity extends Activity
     private void setViewFromEntity(GunplaInfo info) {
         tvBuilderName.setText(info.getBuilderName());
         tvFighterName.setText(info.getFighterName());
-        tvScale.setText(info.getClassValue());
+        tvScale.setText(info.getScaleValue());
         tvClass.setText(info.getClassValue());
         tvModelNo.setText(info.getModelNo());
-        tvGunplaName.setText(info.getModelNo());
+        tvGunplaName.setText(info.getGunplaName());
     }
 }
