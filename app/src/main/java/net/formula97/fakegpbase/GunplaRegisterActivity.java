@@ -103,6 +103,9 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
+    /**
+     * ViewIDの取得を行う。
+     */
     private void initView() {
         etRegisterBuilderName = (EditText) findViewById(R.id.etRegisterBuilderName);
         etRegisterFighterName = (EditText) findViewById(R.id.etRegisterFighterName);
@@ -151,7 +154,14 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         switch(item.getItemId()) {
             case R.id.action_submit:
                 // SQLiteへのデータセーブ
+                GunplaInfoModel model = new GunplaInfoModel(this);
 
+                if (TextUtils.isEmpty(mTagId)) {
+                    mTagId = AppConst.TAGLESS_TAG_ID_PREFIX + model.makeInitialTagId();
+                }
+                GunplaInfo entity = makeGunplaInfo(mTagId);
+                model.save(entity);
+                
                 return true;
             case R.id.action_write_tag:
                 // NFCタグ書き込みのダイアログを出す
@@ -322,9 +332,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                     record = utils.readTag(intent);
                     if (record != null) {
                         savedInfo = model.findGunplaInfoByTagId(record.getText());
-                        if (savedInfo != null) {
-                            // 「すでにNFCタグがガンプラと紐付けられているので、上書きしてよいか？」と確認する
-                        }
+                        setInfoToWidgets(savedInfo);
                     }
 
                 }
@@ -368,6 +376,53 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         info.setTagId(tagId);
 
         return info;
+    }
+
+    /**
+     * ガンプラ情報を画面へ展開する。
+     *
+     * @param info 取得したガンプラ情報
+     */
+    private void setInfoToWidgets(GunplaInfo info) {
+        mTagId = info.getTagId();
+
+        etRegisterBuilderName.setText(info.getBuilderName());
+        etRegisterFighterName.setText(info.getFighterName());
+        // スクラッチビルド
+        switch (info.getScratchBuiltLevel()) {
+            case AppConst.NO_SCRATCH_BUILT:
+                radioBtnNonScratch.setChecked(true);
+                break;
+            case AppConst.PARTIAL_SCRATCH_BUILT:
+                radioBtnPartialScratch.setChecked(true);
+                break;
+            case AppConst.FULL_SCRATCH_BUILT:
+                radioBtnFullScratch.setChecked(true);
+                break;
+        }
+        etRegisterModelName.setText(info.getModelNo());
+        etRegisterGunplaName.setText(info.getGunplaName());
+
+        // スケールとグレードは選択肢にない場合がある
+        List<String> scales = new ArrayList<>(
+                Arrays.asList(getResources().getStringArray(R.array.scale_list)));
+        List<String> grades = new ArrayList<>(
+                Arrays.asList(getResources().getStringArray(R.array.class_list)));
+
+        if (!scales.contains(info.getScaleValue())) {
+            mScaleSelectedPos = scales.size() - 1;
+            isScaleSelected = true;
+            onInputCompleted(info.getScaleValue());
+        } else {
+            spinnerScaleName.setSelection(scales.indexOf(info.getScaleValue()), false);
+        }
+        if (grades.contains(info.getClassValue())) {
+            mClassSelectedPos = grades.size() - 1;
+            isScaleSelected = false;
+            onInputCompleted(info.getClassValue());
+        } else {
+            spinnerClassName.setSelection(grades.indexOf(info.getClassValue()), false);
+        }
     }
 
     @Override
