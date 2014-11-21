@@ -36,6 +36,7 @@
     <string name="init_data">Initialize data</string>
     <string name="confirm_init_data">Are you sure to initialize displaying data?</string>
     <string name="edit_data">Edit data</string>
+    <string name="confirm_write_tag">This tag has another data.\nDo you wish to overwrite it?</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>

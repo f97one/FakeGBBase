@@ -238,7 +238,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         etRegisterGunplaName.setText(mGunplaName);
 
         // NFCの読み込みを有効にする
-        if (mNfcAdapter != null && !mNfcAdapter.isEnabled()) {
+        if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
             Intent i = new Intent(this, this.getClass());
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -330,10 +330,16 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                     if (record != null) {
                         savedInfo = model.findGunplaInfoByTagId(record.getText());
                         if (savedInfo != null) {
-                            // 「すでにNFCタグがガンプラと紐付けられているので、上書きしてよいか？」と確認する
+                            // 「すでにNFCタグが他のデータを持っているが、上書きしてよいか？」と確認する
+                            MessageDialogs dialogs = MessageDialogs.getInstance(
+                                    getString(R.string.dialog_warn),
+                                    getString(R.string.confirm_write_tag),
+                                            MessageDialogs.BUTTON_BOTH);
+                            dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
                         }
                     } else {
-                        // 「TXTレコードがすでにあるが上書きしてよいか？」と確認する
+                        // TXTレコードがないので書き込みを行う
+                        writeToTag(initialTagId, utils);
                     }
 
                 } else {
@@ -347,14 +353,24 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 }
             } else if (action.equals(NfcAdapter.ACTION_TECH_DISCOVERED) && stopTagRead) {
                 // 未使用タグ、かつ書き込みモードの場合は、そのまま書き込み処理に入る
-                mTagId = initialTagId;
-                NdefRecord[] ndefRecords = new NdefRecord[]{
-                        utils.toNdefRecord("ja-JP", mTagId, true)
-                };
-                NdefMessage ndefMessage = new NdefMessage(ndefRecords);
-                utils.writeTag(mReadTag, ndefMessage, wroteCompCallbacks);
+                writeToTag(initialTagId, utils);
             }
         }
+    }
+
+    /**
+     * NFCタグに書き込む。
+     *
+     * @param initialTagId NFCタグに書き込むタグID
+     * @param utils NfcUtilsのインスタンス
+     */
+    private void writeToTag(String initialTagId, NfcUtils utils) {
+        mTagId = initialTagId;
+        NdefRecord[] ndefRecords = new NdefRecord[]{
+                utils.toNdefRecord("ja-JP", mTagId, true)
+        };
+        NdefMessage ndefMessage = new NdefMessage(ndefRecords);
+        utils.writeTag(mReadTag, ndefMessage, wroteCompCallbacks);
     }
 
     /**
@@ -465,6 +481,8 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
             DialogFragment f = (DialogFragment) getFragmentManager().findFragmentByTag(WriteTagDialogs.FRAGMENT_TAG);
             f.dismiss();
+
+            mTagId = "";
         }
 
         @Override
@@ -489,6 +507,16 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
                 // タグIDを初期化
                 mTagId = "";
+            }
+        }
+
+        if (messageBody.equals(getString(R.string.confirm_write_tag))) {
+            if (which == MessageDialogs.PRESSED_POSITIVE) {
+                // 書き込みを行う
+                GunplaInfoModel model = new GunplaInfoModel(this);
+                // 初期タグIDの生成
+                String initialTagId = model.makeInitialTagId();
+                writeToTag(initialTagId, new NfcUtils());
             }
         }
     }
