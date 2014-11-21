@@ -38,9 +38,13 @@ public class GunplaInfoAdapter extends ArrayAdapter<GunplaInfo> {
 
         TextView modelName = (TextView) convertView.findViewById(R.id.listview_model_name);
         TextView gunplaName = (TextView) convertView.findViewById(R.id.listview_gunpla_name);
+        TextView scale = (TextView) convertView.findViewById(R.id.listview_scale);
+        TextView grade = (TextView) convertView.findViewById(R.id.listview_grade);
 
         modelName.setText(gunplaInfoList.get(position).getModelNo());
         gunplaName.setText(gunplaInfoList.get(position).getGunplaName());
+        scale.setText(gunplaInfoList.get(position).getScaleValue());
+        grade.setText(gunplaInfoList.get(position).getClassValue());
 
         return convertView;
     }

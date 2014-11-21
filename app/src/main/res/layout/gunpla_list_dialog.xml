@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingBottom="@dimen/listview_vertical_margin"
     android:paddingLeft="@dimen/listview_horizontal_margin"
     android:paddingRight="@dimen/listview_horizontal_margin"
-    android:paddingTop="@dimen/listview_vertical_margin"
-    android:paddingBottom="@dimen/listview_vertical_margin"
-    >
+    android:paddingTop="@dimen/listview_vertical_margin">
 
     <TextView
         android:id="@+id/listview_model_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:ellipsize="end"
         android:text="RX-78 GP-03S" />
+
+    <TextView
+        android:id="@+id/listview_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/listview_grade"
+        android:ellipsize="start"
+        android:gravity="right"
+        android:text="1/144" />
+
+    <TextView
+        android:id="@+id/listview_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="4dp"
+        android:gravity="right"
+        android:text="HG" />
 
     <TextView
         android:id="@+id/listview_gunpla_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/gpbase_text_margin"
+        android:layout_below="@+id/listview_model_name"
         android:ellipsize="end"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:text="DENDROBIUM STAMEN"/>
-</LinearLayout>
+        android:paddingLeft="@dimen/gpbase_text_margin"
+        android:text="DENDROBIUM STAMEN"
+        android:textAppearance="?android:textAppearanceLarge" />
+</RelativeLayout>
