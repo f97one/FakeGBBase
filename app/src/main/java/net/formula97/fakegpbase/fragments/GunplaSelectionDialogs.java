@@ -84,7 +84,7 @@ public class GunplaSelectionDialogs extends DialogFragment {
                 getDialog().dismiss();
             }
         });
-
+        builder.setTitle(R.string.please_select);
         builder.setView(listView);
 
         return builder.create();
