@@ -191,7 +191,7 @@ public class NfcUtils {
                     try {
                         txt = parse(record);
 
-                        if (!TextUtils.isEmpty(txt.getText())
+                        if (txt != null && !TextUtils.isEmpty(txt.getText())
                                 && !TextUtils.isEmpty(txt.getLanguageCode())
                                 && txt.isEncodeUtf8() != null ) {
                             // 中身が詰まっている時だけbreak

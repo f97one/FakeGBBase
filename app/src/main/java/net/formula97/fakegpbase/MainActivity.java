@@ -209,7 +209,10 @@ public class MainActivity extends Activity
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
             if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
                 // 登録済みタグ（＝フォーマット済みNFCを含む）の場合のみ処理
-                setGunplaInfo(readTag(intent));
+                GunplaInfo info = readTag(intent);
+                if (info != null) {
+                    setGunplaInfo(info);
+                }
             }
         }
     }
