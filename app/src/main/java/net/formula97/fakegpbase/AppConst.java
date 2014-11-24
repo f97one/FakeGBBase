@@ -24,7 +24,7 @@ public class AppConst {
     public static final String CHARSET_UTF16 = "UTF-16";
 
     public static final String INPUT_FILTER_ALL_CAPS_WITH_NUMBER = "^[A-Za-z0-9./ ]+$";
-    public static final String INPUT_FILTER_ALL_CAPS_WITH_NUMBER_AND_SIMBOLS = "^[A-Za-z0-9./(){}*+, ]+$";
+    public static final String INPUT_FILTER_ALL_CAPS_WITH_NUMBER_AND_SYMBOLS = "^[A-Za-z0-9./(){}*+,\\- ]+$";
 
     public static final String TAGLESS_TAG_ID_PREFIX = "NOTAG_";
 }
