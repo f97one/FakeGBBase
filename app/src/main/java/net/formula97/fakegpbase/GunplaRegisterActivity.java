@@ -118,6 +118,12 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         radioBtnFullScratch = (RadioButton) findViewById(R.id.radioBtnFullScratch);
         etRegisterModelName = (EditText) findViewById(R.id.etRegisterModelName);
         etRegisterGunplaName = (EditText) findViewById(R.id.etRegisterGunplaName);
+
+        // InputFilterの設置
+        etRegisterBuilderName.setFilters(StringUtils.makeFilter(AppConst.INPUT_FILTER_ALL_CAPS_WITH_NUMBER, 0));
+        etRegisterFighterName.setFilters(StringUtils.makeFilter(AppConst.INPUT_FILTER_ALL_CAPS_WITH_NUMBER, 0));
+        etRegisterModelName.setFilters(StringUtils.makeFilter(AppConst.INPUT_FILTER_ALL_CAPS_WITH_NUMBER_AND_SIMBOLS, 0));
+        etRegisterGunplaName.setFilters(StringUtils.makeFilter(AppConst.INPUT_FILTER_ALL_CAPS_WITH_NUMBER_AND_SIMBOLS, 0));
     }
 
     /**
