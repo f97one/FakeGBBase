@@ -29,6 +29,7 @@ import com.google.android.gms.ads.AdView;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.Databases.GunplaInfoModel;
+import net.formula97.fakegpbase.fragments.GunplaSelectionDialogs;
 import net.formula97.fakegpbase.fragments.MessageDialogs;
 import net.formula97.fakegpbase.fragments.NewItemDialog;
 import net.formula97.fakegpbase.fragments.WriteTagDialogs;
@@ -40,7 +41,8 @@ import java.util.Locale;
 
 
 public class GunplaRegisterActivity extends Activity implements AdapterView.OnItemSelectedListener,
-        NewItemDialog.OnInputCompleteListener, WriteTagDialogs.OnTagOperationListener, MessageDialogs.DialogsButtonSelectionCallback {
+        NewItemDialog.OnInputCompleteListener, WriteTagDialogs.OnTagOperationListener,
+        MessageDialogs.DialogsButtonSelectionCallback, GunplaSelectionDialogs.OnGunplaSelectedListener {
 
     private EditText etRegisterBuilderName;
     private EditText etRegisterFighterName;
@@ -72,7 +74,6 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private boolean isScaleSelected = true;
     private boolean stopTagRead = false;
     private Tag mReadTag;
-    private NdefMessage mNdefMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,10 +161,11 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        GunplaInfoModel model = new GunplaInfoModel(this);
+
         switch(item.getItemId()) {
             case R.id.action_submit:
                 // SQLiteへのデータセーブ
-                GunplaInfoModel model = new GunplaInfoModel(this);
 
                 if (TextUtils.isEmpty(mTagId)) {
                     mTagId = AppConst.TAGLESS_TAG_ID_PREFIX + model.makeInitialTagId();
@@ -191,6 +193,22 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                         getString(R.string.confirm_init_data),
                         MessageDialogs.BUTTON_BOTH);
                 dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+                return true;
+
+            case R.id.action_edit:
+                // データの有無を確認する
+                List<GunplaInfo> gunplaInfoList = model.findAll();
+                if (gunplaInfoList == null || gunplaInfoList.size() == 0) {
+                    // データ無しとして処理を中止する
+                    MessageDialogs d1 = MessageDialogs.getInstance(
+                            getString(R.string.dialgo_info),
+                            getString(R.string.no_gunpla_registered),
+                            MessageDialogs.BUTTON_POSITIVE);
+                    d1.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+                } else {
+                    GunplaSelectionDialogs d = GunplaSelectionDialogs.newInstance();
+                    d.show(getFragmentManager(), GunplaSelectionDialogs.FRAGMENT_TAG);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -597,5 +615,11 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 writeToTag(initialTagId, new NfcUtils());
             }
         }
+    }
+
+    @Override
+    public void onGunplaSelected(GunplaInfo info) {
+        setInfoToFields(info);
+        setInfoToWidgets(info);
     }
 }
