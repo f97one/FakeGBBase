@@ -32,7 +32,7 @@
                     android:id="@+id/etRegisterBuilderName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="textEmailAddress" />
 
             </LinearLayout>
 
@@ -51,7 +51,7 @@
                     android:id="@+id/etRegisterFighterName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="textEmailAddress" />
 
             </LinearLayout>
 
@@ -150,7 +150,7 @@
                     android:id="@+id/etRegisterModelName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
+                    android:inputType="textEmailAddress"/>
 
             </LinearLayout>
 
@@ -170,7 +170,7 @@
                     android:id="@+id/etRegisterGunplaName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
+                    android:inputType="textEmailAddress"/>
 
             </LinearLayout>
 
