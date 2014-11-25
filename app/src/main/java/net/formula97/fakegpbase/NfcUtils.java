@@ -69,11 +69,10 @@ public class NfcUtils {
         byte status = (byte) (utfBit | langBytes.length);
 
         // ステータスバイト、言語バイト、テキストバイトを連結し、ペイロードを構築
-        byte[] payload = concat(new byte[] { (byte) status }, langBytes, textBytes);
+        byte[] payload = concat(new byte[] {status}, langBytes, textBytes);
 
         // NDEFレコードを作成
-        NdefRecord rec = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
-        return rec;
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
     }
 
 
@@ -110,9 +109,8 @@ public class NfcUtils {
     private String convertToCRLF(String text) {
         String repCrLf = text.replaceAll("\r\n", "\n");
         String repLf = repCrLf.replaceAll("\r", "\n");
-        String rep = repLf.replaceAll("\n", "\r\n");
 
-        return rep;
+        return repLf.replaceAll("\n", "\r\n");
     }
 
     /**
@@ -123,9 +121,8 @@ public class NfcUtils {
      */
     private String convertToLf(String text) {
         String repCrLf = text.replaceAll("\r\n", "\n");
-        String repLf = repCrLf.replaceAll("\r", "\n");
 
-        return  repLf;
+        return repCrLf.replaceAll("\r", "\n");
     }
 
     /**

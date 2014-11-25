@@ -48,7 +48,6 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private EditText etRegisterFighterName;
     private Spinner spinnerScaleName;
     private Spinner spinnerClassName;
-    private RadioGroup radioGroup1;
     private RadioButton radioBtnNonScratch;
     private RadioButton radioBtnPartialScratch;
     private RadioButton radioBtnFullScratch;
@@ -115,7 +114,6 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         etRegisterFighterName = (EditText) findViewById(R.id.etRegisterFighterName);
         spinnerScaleName = (Spinner) findViewById(R.id.spinnerScaleName);
         spinnerClassName = (Spinner) findViewById(R.id.spinnerClassName);
-        radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
         radioBtnNonScratch = (RadioButton) findViewById(R.id.radioBtnNonScratch);
         radioBtnPartialScratch = (RadioButton) findViewById(R.id.radioBtnPartialScratch);
         radioBtnFullScratch = (RadioButton) findViewById(R.id.radioBtnFullScratch);
@@ -245,14 +243,12 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private void parseNfcIntent(Intent intent) {
 
         // やってきたIntentがnullの場合はそのまま抜ける
-        if (intent == null) {
-            return;
-        } else {
+        if (intent != null) {
             GunplaInfoModel model = new GunplaInfoModel(this);
             String initialTagId = model.makeInitialTagId();
             NfcUtils nfcUtils = new NfcUtils();
-            NfcTextRecord record = null;
-            GunplaInfo savedInfo = null;
+            NfcTextRecord record;
+            GunplaInfo savedInfo;
 
             mReadTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             if (mReadTag == null) {
