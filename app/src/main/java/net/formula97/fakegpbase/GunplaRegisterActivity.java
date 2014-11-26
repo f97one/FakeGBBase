@@ -74,6 +74,17 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private boolean stopTagRead = false;
     private Tag mReadTag;
 
+    private final String bundleKeyBuilderName = this.getClass().getSimpleName() + "-bundleKeyBuilderName";
+    private final String bundleKeyFighterName = this.getClass().getSimpleName() + "-bundleKeyFighterName";
+    private final String bundleKeyScaleSelectedPos = this.getClass().getSimpleName() + "-bundleKeyScaleSelectedPos";
+    private final String bundleKeyScaleVal = this.getClass().getSimpleName() + "-bundleKeyScaleVal";
+    private final String bundleKeyClassSelectedPos = this.getClass().getSimpleName() + "-bundleKeyClassSelectedPos";
+    private final String bundleKeyClassVal = this.getClass().getSimpleName() + "-bundleKeyClassVal";
+    private final String bundleKeyScratchBuiltLevel = this.getClass().getSimpleName() + "-bundleKeyScratchBuiltLevel";
+    private final String bundleKeyModelName = this.getClass().getSimpleName() + "-bundleKeyModelName";
+    private final String bundleKeyGunplaName = this.getClass().getSimpleName() + "-bundleKeyGunplaName";
+    private final String bundleKeyTagId = this.getClass().getSimpleName() + "-bundleKeyTagId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -287,7 +298,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                     }
 
                 }
-            } else if (isValidTag(action) && stopTagRead) {
+            } else if (NfcUtils.isValidTag(action) && stopTagRead) {
                 // 未使用タグ、かつ書き込みモードの場合は、そのまま書き込み処理に入る
                 writeToTag(initialTagId, nfcUtils);
             }
@@ -409,7 +420,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
                 // 書き込みまで行うか否かは、onResume()で判断させる
                 setIntent(intent);
-            } else if (isValidTag(action) && stopTagRead) {
+            } else if (NfcUtils.isValidTag(action) && stopTagRead) {
                 // 未使用タグ、かつ書き込みモードの場合は、そのまま書き込み処理に入るが、
                 // 実際の処理はonResumeへ回す
                 setIntent(intent);
@@ -417,23 +428,21 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         }
     }
 
-    private boolean isValidTag(String action) {
-        return action.equals(NfcAdapter.ACTION_TECH_DISCOVERED)
-                || action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
-    }
-
     /**
      * NFCタグに書き込む。
      *
-     * @param initialTagId NFCタグに書き込むタグID
+     * @param tagId NFCタグに書き込むタグID
      * @param utils NfcUtilsのインスタンス
      */
-    private void writeToTag(String initialTagId, NfcUtils utils) {
+    private void writeToTag(String tagId, NfcUtils utils) {
         if (mReadTag == null) {
             return;
         }
 
-        mTagId = initialTagId;
+        // すでにタグIDがある場合は、新しい値を無視する
+        if (TextUtils.isEmpty(mTagId)) {
+            mTagId = tagId;
+        }
         NdefRecord[] ndefRecords = new NdefRecord[]{
                 utils.toNdefRecord(Locale.JAPANESE.getLanguage(), mTagId, true)
         };
@@ -574,6 +583,8 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
         @Override
         public void onFailed(String errorMessage, Throwable e) {
+            e.printStackTrace();
+
             DialogFragment f = (DialogFragment) getFragmentManager().findFragmentByTag(WriteTagDialogs.FRAGMENT_TAG);
             if (f != null) {
                 f.dismiss();
@@ -617,5 +628,45 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     public void onGunplaSelected(GunplaInfo info) {
         setInfoToFields(info);
         setInfoToWidgets(info);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(bundleKeyBuilderName, etRegisterBuilderName.getText().toString());
+        outState.putString(bundleKeyFighterName, etRegisterFighterName.getText().toString());
+        outState.putInt(bundleKeyScaleSelectedPos, spinnerScaleName.getSelectedItemPosition());
+        outState.putString(bundleKeyScaleVal, (String) spinnerScaleName.getSelectedItem());
+        outState.putInt(bundleKeyClassSelectedPos, spinnerClassName.getSelectedItemPosition());
+        outState.putString(bundleKeyClassVal, (String) spinnerClassName.getSelectedItem());
+        int scratch = 0;
+        if (radioBtnNonScratch.isChecked()) {
+            scratch = AppConst.NO_SCRATCH_BUILT;
+        } else if (radioBtnPartialScratch.isChecked()) {
+            scratch = AppConst.PARTIAL_SCRATCH_BUILT;
+        } else if (radioBtnFullScratch.isChecked()) {
+            scratch = AppConst.FULL_SCRATCH_BUILT;
+        }
+        outState.putInt(bundleKeyScratchBuiltLevel, scratch);
+        outState.putString(bundleKeyModelName, etRegisterModelName.getText().toString());
+        outState.putString(bundleKeyGunplaName, etRegisterGunplaName.getText().toString());
+        outState.putString(bundleKeyTagId, mTagId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mBuilderName = savedInstanceState.getString(bundleKeyBuilderName);
+        mFighterName = savedInstanceState.getString(bundleKeyFighterName);
+        mScaleSelectedPos = savedInstanceState.getInt(bundleKeyScaleSelectedPos);
+        mScaleVal = savedInstanceState.getString(bundleKeyScaleVal);
+        mClassSelectedPos = savedInstanceState.getInt(bundleKeyClassSelectedPos);
+        mClassVal = savedInstanceState.getString(bundleKeyClassVal);
+        mScratchSelected = savedInstanceState.getInt(bundleKeyScratchBuiltLevel);
+        mModelName = savedInstanceState.getString(bundleKeyModelName);
+        mGunplaName = savedInstanceState.getString(bundleKeyGunplaName);
+        mTagId = savedInstanceState.getString(bundleKeyTagId);
     }
 }
