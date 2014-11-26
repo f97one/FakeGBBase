@@ -43,6 +43,10 @@ public class GunplaInfoModel {
                     dao.getConnectionSource(), new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
+                    GunplaInfo i = findGunplaInfoByTagId(gunplaInfoEntity.getTagId());
+                    if (i != null) {
+                        erase(i);
+                    }
                     dao.createOrUpdate(gunplaInfoEntity);
 
                     return null;
