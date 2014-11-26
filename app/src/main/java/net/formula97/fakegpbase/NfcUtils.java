@@ -10,6 +10,7 @@ import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -231,16 +232,24 @@ public class NfcUtils {
                 // この場合は、書き込むNdefMessageを、Ndef.writeNdefMessageで書き込みます。
                 Ndef ndef = Ndef.get(tag);
                 try {
-                    ndef.connect();
-                    ndef.writeNdefMessage(msg);
+                    if (ndef.isWritable()) {
+                        Log.d(this.getClass().getSimpleName() + "#writeTag", "This Tag is writable.");
+                        ndef.connect();
+                        ndef.writeNdefMessage(msg);
+                    } else {
+                        Log.d(this.getClass().getSimpleName() + "#writeTag", "This Tag is NOT writable.");
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException("タグとの通信に失敗しました。", e);
                 } catch (FormatException e) {
                     throw new RuntimeException("送信するNDEFメッセージのフォーマットが不正です。", e);
                 } finally {
                     try {
-                        ndef.close();
+                        if (ndef.isConnected()) {
+                            ndef.close();
+                        }
                     } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             } else if (techList.contains(NdefFormatable.class.getName())) {
@@ -259,6 +268,7 @@ public class NfcUtils {
                     try {
                         ndeffmt.close();
                     } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             } else {
@@ -272,9 +282,19 @@ public class NfcUtils {
             }
         } catch (RuntimeException e) {
             if (callback != null) {
-                callback.onFailed(e.getMessage(), e.getCause());
+                callback.onFailed(e.getMessage(), e);
             }
         }
+    }
 
+    /**
+     * 有効なNFCタグを読み込んだかどうか判断する。
+     *
+     * @param action Intentで取得したAction
+     * @return 有効なNFCタグならtrue、そうでないならfalse
+     */
+    public static boolean isValidTag(String action) {
+        return action.equals(NfcAdapter.ACTION_TECH_DISCOVERED)
+                || action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
     }
 }
