@@ -3,17 +3,18 @@
     <EditTextPreference
         android:key="builder_name"
         android:inputType="textEmailAddress"
-        android:title="@string/builder_name"
-        />
+        android:title="@string/builder_name" />
     <EditTextPreference
         android:key="fighter_name"
         android:inputType="textEmailAddress"
-        android:title="@string/fighter_name"/>
+        android:title="@string/fighter_name" />
+
+    <!--
     <SwitchPreference
         android:key="use_tag_for_wake_lock"
         android:defaultValue="false"
         android:title="@string/sleep_deterrent"
         android:summaryOn="@string/use_tag"
-        android:summaryOff="@string/dont_suppress_sleep"/>
-
+        android:summaryOff="@string/dont_suppress_sleep" />
+    -->
 </PreferenceScreen>
