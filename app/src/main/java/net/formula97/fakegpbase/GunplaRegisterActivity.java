@@ -65,6 +65,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private String mModelName;
     private String mGunplaName;
     private String mTagId;
+    private GunplaInfo mGunplaInfo;
 
     private NfcAdapter mNfcAdapter;
     private ArrayAdapter<String> scaleAdapter;
@@ -72,6 +73,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private boolean isScaleSelected = true;
     private boolean stopTagRead = false;
     private Tag mReadTag;
+    private boolean permitDelete = false;
 
     private final String bundleKeyBuilderName = this.getClass().getSimpleName() + "-bundleKeyBuilderName";
     private final String bundleKeyFighterName = this.getClass().getSimpleName() + "-bundleKeyFighterName";
@@ -156,6 +158,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         mTagId = "";
 
         mReadTag = null;
+        mGunplaInfo = new GunplaInfo();
     }
 
 
@@ -203,22 +206,32 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 return true;
 
             case R.id.action_edit:
-                // データの有無を確認する
-                List<GunplaInfo> gunplaInfoList = model.findAll();
-                if (gunplaInfoList == null || gunplaInfoList.size() == 0) {
-                    // データ無しとして処理を中止する
-                    MessageDialogs d1 = MessageDialogs.getInstance(
-                            getString(R.string.dialgo_info),
-                            getString(R.string.no_gunpla_registered),
-                            MessageDialogs.BUTTON_POSITIVE);
-                    d1.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
-                } else {
-                    GunplaSelectionDialogs d = GunplaSelectionDialogs.newInstance();
-                    d.show(getFragmentManager(), GunplaSelectionDialogs.FRAGMENT_TAG);
-                }
+                permitDelete = false;
+                showGunplaList(model);
                 return true;
+
+            case R.id.action_delete_data:
+                // データ削除を選んだ場合
+                permitDelete = true;
+                showGunplaList(model);
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showGunplaList(GunplaInfoModel model) {
+        // データの有無を確認する
+        List<GunplaInfo> gunplaInfoList = model.findAll();
+        if (gunplaInfoList == null || gunplaInfoList.size() == 0) {
+            // データ無しとして処理を中止する
+            MessageDialogs d1 = MessageDialogs.getInstance(
+                    getString(R.string.dialgo_info),
+                    getString(R.string.no_gunpla_registered),
+                    MessageDialogs.BUTTON_POSITIVE);
+            d1.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+        } else {
+            GunplaSelectionDialogs d = GunplaSelectionDialogs.newInstance();
+            d.show(getFragmentManager(), GunplaSelectionDialogs.FRAGMENT_TAG);
         }
     }
 
@@ -354,20 +367,19 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
     @Override
     protected void onPause() {
-        super.onPause();
-
         adView2.pause();
 
         if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
         }
+
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        adView2.destroy();
-
         super.onDestroy();
+        adView2.destroy();
     }
 
     @Override
@@ -595,6 +607,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
 
     @Override
     public void onButtonPressed(String messageBody, int which) {
+        // データ初期化の確認
         if (messageBody.equals(getString(R.string.confirm_init_data))) {
             if (which == MessageDialogs.PRESSED_POSITIVE) {
                 // 表示を初期化する
@@ -612,6 +625,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             }
         }
 
+        // タグ書き込みの確認
         if (messageBody.equals(getString(R.string.confirm_write_tag))) {
             if (which == MessageDialogs.PRESSED_POSITIVE) {
                 // 書き込みを行う
@@ -621,12 +635,34 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 writeToTag(initialTagId, new NfcUtils());
             }
         }
+
+        // データ削除の確認
+        if (messageBody.equals(getString(R.string.confirm_delete_data))) {
+            if (which == MessageDialogs.PRESSED_POSITIVE) {
+                // データ削除を行う
+                GunplaInfoModel model = new GunplaInfoModel(this);
+                model.erase(mGunplaInfo);
+
+                Toast.makeText(this, "データを消去した", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
     public void onGunplaSelected(GunplaInfo info) {
-        setInfoToFields(info);
-        setInfoToWidgets(info);
+        if (permitDelete) {
+            this.mGunplaInfo = info;
+
+            MessageDialogs dialogs = MessageDialogs.getInstance(
+                    getString(R.string.dialog_warn),
+                    getString(R.string.confirm_delete_data),
+                    MessageDialogs.BUTTON_BOTH
+            );
+            dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+        } else {
+            setInfoToFields(info);
+            setInfoToWidgets(info);
+        }
     }
 
     @Override
