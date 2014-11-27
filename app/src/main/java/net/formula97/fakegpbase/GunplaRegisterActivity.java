@@ -67,7 +67,6 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
     private String mTagId;
 
     private NfcAdapter mNfcAdapter;
-    private GunplaInfo mGunplaInfo;
     private ArrayAdapter<String> scaleAdapter;
     private ArrayAdapter<String> classAapter;
     private boolean isScaleSelected = true;
@@ -156,7 +155,6 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         mGunplaName = "";
         mTagId = "";
 
-        mGunplaInfo = new GunplaInfo();
         mReadTag = null;
     }
 
