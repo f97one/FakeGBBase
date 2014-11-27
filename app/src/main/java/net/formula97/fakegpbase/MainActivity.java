@@ -3,30 +3,21 @@ package net.formula97.fakegpbase;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.nfc.FormatException;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 
 import net.formula97.fakegpbase.Databases.GunplaInfo;
 import net.formula97.fakegpbase.Databases.GunplaInfoModel;
 import net.formula97.fakegpbase.fragments.GunplaSelectionDialogs;
 import net.formula97.fakegpbase.fragments.MessageDialogs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class MainActivity extends Activity
@@ -41,8 +32,13 @@ public class MainActivity extends Activity
     private TextView tvGunplaName;
 
     private boolean mAlreadyShown = false;
-    private final String KeyAlreadyShown = "KeyAlreadyShown";
-    private final String KeyGunplaInfoJson = "KeyGunplaInfoJson";
+    private final String KeyAlreadyShown = this.getClass().getSimpleName() + "-KeyAlreadyShown";
+    private final String KeyBuilderName = this.getClass().getSimpleName() + "-KeyBuilderName";
+    private final String KeyFighterName = this.getClass().getSimpleName() + "-KeyFighterName";
+    private final String KeyScaleVal = this.getClass().getSimpleName() + "-KeyScaleVal";
+    private final String KeyClassVal = this.getClass().getSimpleName() + "-KeyClassVal";
+    private final String KeyModelNo = this.getClass().getSimpleName() + "-KeyModelNo";
+    private final String KeyGunplaName = this.getClass().getSimpleName() + "-KeyGunplaName";
 
     private String mBuilderName;
     private String mFighterName;
@@ -50,8 +46,6 @@ public class MainActivity extends Activity
     private String mClassVal;
     private String mModelNo;
     private String mGunplaName;
-    private String mGunplaInfoJson;
-    private GunplaInfo gunplaInfo;
 
     private NfcAdapter mNfcAdapter;
 
@@ -150,6 +144,10 @@ public class MainActivity extends Activity
     protected void onResume() {
         super.onResume();
 
+        parseNfcIntgen(getIntent());
+
+        setWidgetFromField();
+
         // NFCアダプターが有効でない場合は、設定画面を呼ぶか否かをDialogを表示する
         if (mNfcAdapter != null) {
             if (!mNfcAdapter.isEnabled() && !mAlreadyShown) {
@@ -176,7 +174,46 @@ public class MainActivity extends Activity
                 dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
             }
         }
+    }
 
+    /**
+     * NFCタグの中身を解析する。
+     *
+     * @param intent
+     */
+    private void parseNfcIntgen(Intent intent) {
+        // やってきたIntentがnullの場合はそのまま抜ける
+        if (intent != null) {
+            GunplaInfoModel model = new GunplaInfoModel(this);
+            NfcUtils nfcUtils = new NfcUtils();
+            NfcTextRecord record;
+            GunplaInfo savedInfo;
+
+            Parcelable readTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            if (readTag == null) {
+                return;
+            }
+
+            String action = intent.getAction();
+
+            if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+                // TXTレコードの取り出しを試みる
+                record = nfcUtils.readTag(intent);
+                if (record != null) {
+                    // TXTレコードの取り出しに成功した場合は、ガンプラ情報取得を試みる
+                    savedInfo = model.findGunplaInfoByTagId(record.getText());
+                    if (savedInfo != null) {
+                        setGunplaInfo(savedInfo);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * フィールドの値をウィジェットに展開する。
+     */
+    private void setWidgetFromField() {
         tvBuilderName.setText(mBuilderName);
         tvFighterName.setText(mFighterName);
         tvClass.setText(mClassVal);
@@ -209,55 +246,9 @@ public class MainActivity extends Activity
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
             if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
                 // 登録済みタグ（＝フォーマット済みNFCを含む）の場合のみ処理
-                GunplaInfo info = readTag(intent);
-                if (info != null) {
-                    setGunplaInfo(info);
-                }
+                setIntent(intent);
             }
         }
-    }
-
-    /**
-     * NFCタグのTEXTレコードからガンプラ情報を取得する。
-     *
-     * @param i NFCタグ読み取りのIntent
-     * @return 検索結果のガンプラ情報、ヒットしなかった場合はnullを返す
-     */
-    private GunplaInfo readTag(Intent i) {
-        GunplaInfo info = null;
-
-        if (i != null) {
-            Parcelable[] parcelables = i.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-
-            NfcUtils nfcUtils = new NfcUtils();
-            GunplaInfoModel model = new GunplaInfoModel(this);
-
-            if (parcelables != null) {
-                for (Parcelable p : parcelables) {
-                    NdefMessage msg = (NdefMessage) p;
-                    NdefRecord[] records = msg.getRecords();
-
-                    for (NdefRecord record : records) {
-                        try {
-                            NfcTextRecord nfcTextRecord = nfcUtils.parse(record);
-                            info = model.findGunplaInfoByTagId(nfcTextRecord.getText());
-
-                            if (info != null) {
-                                break;
-                            }
-
-                        } catch (FormatException e) {
-                            if (BuildConfig.DEBUG) {
-                                // デバッグ時のみStackTraceを流す
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-        return info;
     }
 
     /**
@@ -266,11 +257,6 @@ public class MainActivity extends Activity
      * @param gunplaInfo
      */
     private void setGunplaInfo(GunplaInfo gunplaInfo) {
-        // GSONでJSON化して保管する
-        Gson gson = new Gson();
-        this.gunplaInfo = gunplaInfo;
-        mGunplaInfoJson = gson.toJson(gunplaInfo, GunplaInfo.class);
-
         setToFields(gunplaInfo);
         setViewFromEntity(gunplaInfo);
     }
@@ -284,10 +270,12 @@ public class MainActivity extends Activity
 
         outState.putBoolean(KeyAlreadyShown, mAlreadyShown);
 
-        // ウィジェット類の値格納
-        if (!TextUtils.isEmpty(mGunplaInfoJson)) {
-            outState.putString(KeyGunplaInfoJson, mGunplaInfoJson);
-        }
+        outState.putString(KeyBuilderName, tvBuilderName.getText().toString());
+        outState.putString(KeyFighterName, tvFighterName.getText().toString());
+        outState.putString(KeyScaleVal, tvClass.getText().toString());
+        outState.putString(KeyClassVal, tvClass.getText().toString());
+        outState.putString(KeyModelNo, tvModelNo.getText().toString());
+        outState.putString(KeyGunplaName, tvGunplaName.getText().toString());
     }
 
     /**
@@ -299,15 +287,12 @@ public class MainActivity extends Activity
 
         mAlreadyShown = savedInstanceState.getBoolean(KeyAlreadyShown);
 
-        // ウィジェット類の値復元
-        mGunplaInfoJson = savedInstanceState.getString(KeyGunplaInfoJson);
-        if (!TextUtils.isEmpty(mGunplaInfoJson)) {
-            // JSONを保存していた場合は、JSONから変数の内容を復元する
-            Gson gson = new Gson();
-            gunplaInfo = gson.fromJson(mGunplaInfoJson, GunplaInfo.class);
-
-            setToFields(gunplaInfo);
-        }
+        mBuilderName = savedInstanceState.getString(KeyBuilderName);
+        mFighterName = savedInstanceState.getString(KeyFighterName);
+        mScaleVal = savedInstanceState.getString(KeyScaleVal);
+        mClassVal = savedInstanceState.getString(KeyClassVal);
+        mModelNo = savedInstanceState.getString(KeyModelNo);
+        mGunplaName = savedInstanceState.getString(KeyGunplaName);
     }
 
     /**
@@ -334,15 +319,10 @@ public class MainActivity extends Activity
         mClassVal = "";
         mModelNo = "";
         mGunplaName = "";
-        mGunplaInfoJson = "";
-        gunplaInfo = null;
     }
 
     @Override
     public void onGunplaSelected(GunplaInfo info) {
-        Gson gson = new Gson();
-        mGunplaInfoJson = gson.toJson(info, GunplaInfo.class);
-
         setViewFromEntity(info);
     }
 
