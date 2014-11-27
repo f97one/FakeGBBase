@@ -72,7 +72,7 @@ public class GunplaInfoModel {
             e.printStackTrace();
         }
 
-        return infos == null ? null : infos.get(0);
+        return (infos == null || infos.size() == 0) ? null : infos.get(0);
     }
 
     /**
