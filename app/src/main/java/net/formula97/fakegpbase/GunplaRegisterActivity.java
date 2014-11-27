@@ -269,34 +269,35 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
             String action = intent.getAction();
 
             if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
-                if (stopTagRead) {
-                    // 書き込みモードの処理
-                    // 一旦タグを読み込み
-                    record = nfcUtils.readTag(intent);
-                    if (record != null) {
-                        savedInfo = model.findGunplaInfoByTagId(record.getText());
-                        if (savedInfo != null) {
+                // TXTレコードの取り出しを試みる
+                record = nfcUtils.readTag(intent);
+                if (record != null) {
+                    // TXTレコードの取り出しに成功した場合は、ガンプラ情報取得を試みる
+                    savedInfo = model.findGunplaInfoByTagId(record.getText());
+                    if (savedInfo != null) {
+                        if (stopTagRead) {
+                            // DBにデータあり、かつ書き込みモード時
                             // 「すでにNFCタグが他のデータを持っているが、上書きしてよいか？」と確認する
                             MessageDialogs dialogs = MessageDialogs.getInstance(
                                     getString(R.string.dialog_warn),
                                     getString(R.string.confirm_write_tag),
                                     MessageDialogs.BUTTON_BOTH);
                             dialogs.show(getFragmentManager(), MessageDialogs.FRAGMENT_TAG);
+                        } else {
+                            // 読み込んだデータを展開
+                            setInfoToFields(savedInfo);
+                            setInfoToWidgets(savedInfo);
                         }
                     } else {
-                        // TXTレコードがないので書き込みを行う
-                        writeToTag(initialTagId, nfcUtils);
+                        if (stopTagRead) {
+                            // データなし、かつ書き込みモードは、タグにデータを書き込む
+                            writeToTag(initialTagId, nfcUtils);
+                        }
+                        // データなし、かつ読み込みモード時は何もしない
                     }
-
                 } else {
-                    // 読み込みモード
-                    record = nfcUtils.readTag(intent);
-                    if (record != null) {
-                        savedInfo = model.findGunplaInfoByTagId(record.getText());
-                        setInfoToFields(savedInfo);
-                        setInfoToWidgets(savedInfo);
-                    }
-
+                    // 有効タグ情報なしのため、タグにデータを書き込む
+                    writeToTag(initialTagId, nfcUtils);
                 }
             } else if (NfcUtils.isValidTag(action) && stopTagRead) {
                 // 未使用タグ、かつ書き込みモードの場合は、そのまま書き込み処理に入る
