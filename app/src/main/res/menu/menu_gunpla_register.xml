@@ -28,7 +28,7 @@
         android:showAsAction="never" />
     <item
         android:id="@+id/action_delete_data"
-        android:title="Delete"
+        android:title="@string/delete_data"
         android:orderInCategory="89"
         android:showAsAction="never"
         android:icon="@android:drawable/ic_menu_delete" />
