@@ -18,8 +18,6 @@ import net.formula97.fakegpbase.fragments.AboutDialog;
  */
 public class SettingActivity extends Activity {
 
-    public static final int REQUEST_CODE_OPEN_URL = 0x7fff;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
