@@ -1,17 +1,24 @@
 package net.formula97.fakegpbase;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import net.formula97.fakegpbase.fragments.AboutDialog;
+
 /**
  * Preference画面を処理するActivity。
  */
 public class SettingActivity extends Activity {
+
+    public static final int REQUEST_CODE_OPEN_URL = 0x7fff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,13 @@ public class SettingActivity extends Activity {
             builderName.setSummary(bname);
             fighterName.setSummary(fname);
 
-            // TODO ライセンス表示とFormationSans公開サイトへのリンクを用意する
+            // Formation Sans配布サイトへのリンク
+            Preference f = findPreference(AppConst.PREF_KEY_FORMATION_SANS);
+            f.setOnPreferenceClickListener(mFontClick);
+
+            // 「このアプリについて」の表示
+            Preference aboutThis = findPreference(AppConst.PREF_KEY_ABOUT_APP);
+            aboutThis.setOnPreferenceClickListener(mAboutThis);
         }
 
         /**
@@ -70,6 +83,34 @@ public class SettingActivity extends Activity {
                 } else {
                     return false;
                 }
+            }
+        };
+
+        /**
+         * Formation Sans配布サイトへのリンクを表示
+         */
+        private Preference.OnPreferenceClickListener mFontClick = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Uri uri = Uri.parse(AppConst.FORMATION_SANS_URL);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+                startActivity(intent);
+
+                return true;
+            }
+        };
+
+        /**
+         * 「このアプリについて」ダイアログを表示
+         */
+        private Preference.OnPreferenceClickListener mAboutThis = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AboutDialog dialog = new AboutDialog();
+                dialog.show(getFragmentManager(), AboutDialog.DIALOG_TAG);
+
+                return true;
             }
         };
     }

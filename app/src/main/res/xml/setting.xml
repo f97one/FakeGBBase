@@ -8,7 +8,12 @@
         android:key="fighter_name"
         android:inputType="textEmailAddress"
         android:title="@string/fighter_name" />
-
+    <Preference
+        android:key="formation_sans"
+        android:title="@string/formation_sans" />
+    <Preference
+        android:key="about_app"
+        android:title="@string/about_app"/>
     <!--
     <SwitchPreference
         android:key="use_tag_for_wake_lock"

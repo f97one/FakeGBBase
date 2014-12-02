@@ -17,7 +17,8 @@ public class AppConst {
 
     public static final String PREF_KEY_BUILDER_NAME = "builder_name";
     public static final String PREF_KEY_FIGHTER_NAME = "fighter_name";
-    public static final String PREF_KEY_USE_WAKE_LOCK_TAG = "use_tag_for_wake_lock";
+    public static final String PREF_KEY_FORMATION_SANS = "formation_sans";
+    public static final String PREF_KEY_ABOUT_APP = "about_app";
 
     public static final String CHARSET_US_ASCII = "US-ASCII";
     public static final String CHARSET_UTF8 = "UTF-8";
@@ -27,4 +28,6 @@ public class AppConst {
     public static final String INPUT_FILTER_ALL_CAPS_WITH_NUMBER_AND_SYMBOLS = "^[A-Za-z0-9./(){}*+,\\- ]+$";
 
     public static final String TAGLESS_TAG_ID_PREFIX = "NOTAG_";
+
+    public static final String FORMATION_SANS_URL = "http://www.dafont.com/formation-sans.font";
 }

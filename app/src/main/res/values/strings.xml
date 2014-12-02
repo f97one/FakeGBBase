@@ -39,6 +39,11 @@
     <string name="confirm_write_tag">This tag has another data.\nDo you wish to overwrite it?</string>
     <string name="delete_data">Delete data</string>
     <string name="confirm_delete_data">Do you really want to delete this data?</string>
+    <string name="about_app">About this App</string>
+    <string name="bsd_license">BSD License</string>
+    <string name="formation_sans">Formation Sans</string>
+    <string name="about_app_summary">GP Base like App to respond to NFC tags</string>
+    <string name="version">Version</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>
