@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fake GP Base</string>
+    <string name="builder_gpbase" translatable="false"></string>
+    <string name="about_app">このアプリについて</string>
+    <string name="about_app_summary">NFCタグに反応するGPベースっぽいアプリ</string>
+    <string name="action_settings">設定</string>
+    <string name="bsd_license">BSDライセンス</string>
+    <string name="builder_name">ビルダー名</string>
+    <string name="class_name">クラス名称</string>
+    <string name="confirm_delete_data">本当にこのデータを消しますか?</string>
+    <string name="confirm_init_data">表示中のデータを初期化しますか?</string>
+    <string name="confirm_write_tag">このタグには別のデータがあります。\n上書きしますか?</string>
+    <string name="delete_data">データ消去</string>
+    <string name="dialgo_info">情報</string>
+    <string name="dialog_warn">警告</string>
+    <string name="dont_suppress_sleep">デバイスのスリープを抑止しない</string>
+    <string name="edit_data">データ編集</string>
+    <string name="fighter_name">ファイター名</string>
+    <string name="full_scratched">フルスクラッチ</string>
+    <string name="gunpla_name">ガンプラ名称</string>
+    <string name="init_data">データ初期化</string>
+    <string name="input_new">新しい項目を入力してください</string>
+    <string name="model_name">モデル名称</string>
+    <string name="nfc_not_enabled">NFC機能が有効ではありません。</string>
+    <string name="no_gunpla_registered">ガンプラ情報が登録されていません。\n先にガンプラ情報を登録してください。</string>
+    <string name="no_nfc_present">NFC機能がありません。\nガンプラはマニュアルで選んでください。</string>
+    <string name="non_scratched">スクラッチビルドなし</string>
+    <string name="other">その他</string>
+    <string name="partial_scratched">一部スクラッチビルド</string>
+    <string name="please_select">選んでください</string>
+    <string name="please_touch">ガンプラ情報を書き込むタグをタッチしてください。</string>
+    <string name="read_tag">タグ読み込み</string>
+    <string name="register_gunpla">ガンプラ登録</string>
+    <string name="save_data">保存</string>
+    <string name="saved">ガンプラを保存しました：</string>
+    <string name="scale_name">スケールサイズ</string>
+    <string name="scrach_built_level">スクラッチビルドレベル</string>
+    <string name="select_gunpla">ガンプラ選択</string>
+    <string name="sleep_deterrent">スリープ抑止</string>
+    <string name="use_tag">NFCタグをスリープ抑止に使う</string>
+    <string name="version">バージョン</string>
+    <string name="wish_to_enable">NFC機能が有効ではありません。\有効にしますか?</string>
+    <string name="write_tag">タグ書き込み</string>
+</resources>

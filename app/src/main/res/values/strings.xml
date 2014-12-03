@@ -2,8 +2,8 @@
 <resources>
 
     <!-- 設定等共通部分で使用するリソース -->
-    <string name="app_name">Fake GP Base</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name" translatable="false">Fake GP Base</string>
+    <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="builder_name">Builder name</string>
     <string name="fighter_name">Fighter name</string>
@@ -41,21 +41,21 @@
     <string name="confirm_delete_data">Do you really want to delete this data?</string>
     <string name="about_app">About this App</string>
     <string name="bsd_license">BSD License</string>
-    <string name="formation_sans">Formation Sans</string>
+    <string name="formation_sans" translatable="false">Formation Sans</string>
     <string name="about_app_summary">GP Base like App to respond to NFC tags</string>
     <string name="version">Version</string>
     <string name="saved">Saved GUNPLA:</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
-    <string name="builder_gpbase">BUILDER</string>
-    <string name="name_gpbase">NAME</string>
-    <string name="fighter_gpbase">FIGHTER</string>
-    <string name="scale_gpbase">SCALE</string>
-    <string name="class_gpbase">CLASS</string>
-    <string name="model_gpbase">MODEL No.</string>
-    <string name="operator_gpbase">OPERATOR</string>
-    <string name="gunpla">GUNPLA</string>
-    <string name="title_activity_setting">SettingActivity</string>
-    <string name="title_activity_gunpla_register">GunplaRegisterActivity</string>
+    <string name="builder_gpbase" translatable="false">BUILDER</string>
+    <string name="name_gpbase" translatable="false">NAME</string>
+    <string name="fighter_gpbase" translatable="false">FIGHTER</string>
+    <string name="scale_gpbase" translatable="false">SCALE</string>
+    <string name="class_gpbase" translatable="false">CLASS</string>
+    <string name="model_gpbase" translatable="false">MODEL No.</string>
+    <string name="operator_gpbase" translatable="false">OPERATOR</string>
+    <string name="gunpla" translatable="false">GUNPLA</string>
+    <string name="title_activity_setting" translatable="false">SettingActivity</string>
+    <string name="title_activity_gunpla_register" translatable="false">GunplaRegisterActivity</string>
 
 </resources>
