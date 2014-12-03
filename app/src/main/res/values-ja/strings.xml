@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fake GP Base</string>
-    <string name="builder_gpbase" translatable="false"></string>
     <string name="about_app">このアプリについて</string>
     <string name="about_app_summary">NFCタグに反応する\nGPベースっぽいアプリ</string>
     <string name="action_settings">設定</string>
