@@ -1,0 +1,288 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fontsample="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <net.formula97.fakegpbase.TypeFacedTextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/cyan"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/gpbase_vertical_margin_2dp"
+                android:paddingTop="@dimen/gpbase_text_margin"
+                android:text="@string/operator_gpbase"
+                android:textColor="@android:color/black"
+                fontsample:font="formation_sans_regular.ttf" />
+
+            <net.formula97.fakegpbase.TypeFacedTextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/cyan"
+                android:text="@string/builder_gpbase"
+                android:textColor="@android:color/black"
+                fontsample:font="formation_sans_regular.ttf" />
+
+            <LinearLayout
+                android:id="@+id/llBuilderName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv2"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/lime_box"
+                android:orientation="horizontal">
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/gpbase_text_margin"
+                    android:text="@string/name_gpbase"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/cyan"
+                    fontsample:font="formation_sans_regular.ttf" />
+
+                <Space
+                    android:layout_width="@dimen/gpbase_text_margin"
+                    android:layout_height="48dp" />
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:id="@+id/tvBuilderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="HAJIME Fukuna"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/cyan"
+                    fontsample:font="formation_sans_regular.ttf" />
+            </LinearLayout>
+
+            <net.formula97.fakegpbase.TypeFacedTextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llBuilderName"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/cyan"
+                android:text="@string/fighter_gpbase"
+                android:textColor="@android:color/black"
+                fontsample:font="formation_sans_regular.ttf" />
+
+            <LinearLayout
+                android:id="@+id/llFighterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv3"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/lime_box"
+                android:orientation="horizontal">
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/gpbase_text_margin"
+                    android:text="@string/name_gpbase"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/cyan"
+                    fontsample:font="formation_sans_regular.ttf" />
+
+                <Space
+                    android:layout_width="@dimen/gpbase_text_margin"
+                    android:layout_height="48dp" />
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:id="@+id/tvFighterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="HAJIME Fukuna"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/cyan"
+                    fontsample:font="formation_sans_regular.ttf" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <net.formula97.fakegpbase.TypeFacedTextView
+                android:id="@+id/tv4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/cyan"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/gpbase_vertical_margin_2dp"
+                android:paddingTop="@dimen/gpbase_text_margin"
+                android:text="@string/gunpla"
+                android:textColor="@android:color/black"
+                fontsample:font="formation_sans_regular.ttf" />
+
+            <LinearLayout
+                android:id="@+id/llGunplaName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/scale_area"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/lime_box"
+                android:orientation="vertical">
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/gpbase_text_margin"
+                    android:layout_marginTop="@dimen/gpbase_text_margin"
+                    android:gravity="center_horizontal"
+                    android:text="@string/name_gpbase"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/cyan"
+                    fontsample:font="formation_sans_regular.ttf" />
+
+                <net.formula97.fakegpbase.TypeFacedTextView
+                    android:id="@+id/tvGunplaName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/gpbase_text_margin"
+                    android:layout_marginTop="@dimen/gpbase_text_margin"
+                    android:gravity="center_horizontal"
+                    android:text="DENDROBIUM STAMEN"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/cyan"
+                    android:textSize="34dp"
+                    fontsample:font="formation_sans_regular.ttf" />
+
+            </LinearLayout>
+
+            <TableLayout
+                android:id="@+id/scale_area"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv4"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="@dimen/gpbase_text_margin">
+
+                <TableRow>
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tv5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/cyan"
+                        android:gravity="center_vertical"
+                        android:text="@string/scale_gpbase"
+                        android:textColor="@android:color/black"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tvScale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/gpbase_text_margin"
+                        android:gravity="center_vertical"
+                        android:text="1/144"
+                        android:textColor="@color/cyan"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tv6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/gpbase_vertical_margin_2dp"
+                        android:background="@color/cyan"
+                        android:gravity="center_vertical"
+                        android:text="@string/class_gpbase"
+                        android:textColor="@android:color/black"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tvClass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/gpbase_text_margin"
+                        android:layout_marginTop="@dimen/gpbase_vertical_margin_2dp"
+                        android:gravity="center_vertical"
+                        android:text="HG"
+                        android:textColor="@color/cyan"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tv7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/gpbase_vertical_margin_2dp"
+                        android:background="@color/cyan"
+                        android:gravity="center_vertical"
+                        android:text="@string/model_gpbase"
+                        android:textColor="@android:color/black"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                    <net.formula97.fakegpbase.TypeFacedTextView
+                        android:id="@+id/tvModelNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/gpbase_text_margin"
+                        android:layout_marginTop="@dimen/gpbase_vertical_margin_2dp"
+                        android:gravity="center_vertical"
+                        android:text="RX-78 GP-03S"
+                        android:textColor="@color/cyan"
+                        fontsample:font="formation_sans_regular.ttf" />
+
+                </TableRow>
+            </TableLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
