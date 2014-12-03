@@ -44,6 +44,7 @@
     <string name="formation_sans">Formation Sans</string>
     <string name="about_app_summary">GP Base like App to respond to NFC tags</string>
     <string name="version">Version</string>
+    <string name="saved">Saved GUNPLA:</string>
 
     <!-- GPベースの英語のみ部分で使用するリソース -->
     <string name="builder_gpbase">BUILDER</string>

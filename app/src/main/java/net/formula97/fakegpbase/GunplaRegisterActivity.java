@@ -182,7 +182,9 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 }
                 GunplaInfo entity = makeGunplaInfo(mTagId);
                 model.save(entity);
-                
+
+                Toast.makeText(this, getString(R.string.saved) + entity.getGunplaName(), Toast.LENGTH_LONG).show();
+                resetWidgets();
                 return true;
             case R.id.action_write_tag:
                 // NFCタグ書き込みのダイアログを出す
@@ -611,17 +613,7 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
         if (messageBody.equals(getString(R.string.confirm_init_data))) {
             if (which == MessageDialogs.PRESSED_POSITIVE) {
                 // 表示を初期化する
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                etRegisterBuilderName.setText(preferences.getString(AppConst.PREF_KEY_BUILDER_NAME, ""));
-                etRegisterFighterName.setText(preferences.getString(AppConst.PREF_KEY_FIGHTER_NAME, ""));
-                spinnerClassName.setSelection(0, false);
-                spinnerScaleName.setSelection(0, false);
-                radioBtnNonScratch.setChecked(true);
-                etRegisterModelName.setText("");
-                etRegisterGunplaName.setText("");
-
-                // タグIDを初期化
-                mTagId = "";
+                resetWidgets();
             }
         }
 
@@ -646,6 +638,23 @@ public class GunplaRegisterActivity extends Activity implements AdapterView.OnIt
                 Toast.makeText(this, "データを消去した", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    /**
+     * ウィジェットを初期化する。
+     */
+    private void resetWidgets() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        etRegisterBuilderName.setText(preferences.getString(AppConst.PREF_KEY_BUILDER_NAME, ""));
+        etRegisterFighterName.setText(preferences.getString(AppConst.PREF_KEY_FIGHTER_NAME, ""));
+        spinnerClassName.setSelection(0, false);
+        spinnerScaleName.setSelection(0, false);
+        radioBtnNonScratch.setChecked(true);
+        etRegisterModelName.setText("");
+        etRegisterGunplaName.setText("");
+
+        // タグIDを初期化
+        mTagId = "";
     }
 
     @Override
