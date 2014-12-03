@@ -42,7 +42,7 @@
     <string name="about_app">About this App</string>
     <string name="bsd_license">BSD License</string>
     <string name="formation_sans" translatable="false">Formation Sans</string>
-    <string name="about_app_summary">GP Base like App to respond to NFC tags</string>
+    <string name="about_app_summary">GP Base like App\nto respond to NFC tags</string>
     <string name="version">Version</string>
     <string name="saved">Saved GUNPLA:</string>
 

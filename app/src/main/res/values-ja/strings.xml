@@ -3,7 +3,7 @@
     <string name="app_name">Fake GP Base</string>
     <string name="builder_gpbase" translatable="false"></string>
     <string name="about_app">このアプリについて</string>
-    <string name="about_app_summary">NFCタグに反応するGPベースっぽいアプリ</string>
+    <string name="about_app_summary">NFCタグに反応する\nGPベースっぽいアプリ</string>
     <string name="action_settings">設定</string>
     <string name="bsd_license">BSDライセンス</string>
     <string name="builder_name">ビルダー名</string>
@@ -35,7 +35,7 @@
     <string name="save_data">保存</string>
     <string name="saved">ガンプラを保存しました：</string>
     <string name="scale_name">スケールサイズ</string>
-    <string name="scrach_built_level">スクラッチビルドレベル</string>
+    <string name="scrach_built_level">スクラッチ\nビルドレベル</string>
     <string name="select_gunpla">ガンプラ選択</string>
     <string name="sleep_deterrent">スリープ抑止</string>
     <string name="use_tag">NFCタグをスリープ抑止に使う</string>
