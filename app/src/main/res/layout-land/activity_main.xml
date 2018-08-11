@@ -32,7 +32,7 @@
                 android:paddingTop="@dimen/gpbase_text_margin"
                 android:text="@string/operator_gpbase"
                 android:textColor="@android:color/black"
-                fontsample:font="formation_sans_regular.ttf" />
+                fontsample:fontName="formation_sans_regular.ttf" />
 
             <net.formula97.fakegpbase.TypeFacedTextView
                 android:id="@+id/tv2"
@@ -44,7 +44,7 @@
                 android:background="@color/cyan"
                 android:text="@string/builder_gpbase"
                 android:textColor="@android:color/black"
-                fontsample:font="formation_sans_regular.ttf" />
+                fontsample:fontName="formation_sans_regular.ttf" />
 
             <LinearLayout
                 android:id="@+id/llBuilderName"
@@ -65,7 +65,7 @@
                     android:text="@string/name_gpbase"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/cyan"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
 
                 <Space
                     android:layout_width="@dimen/gpbase_text_margin"
@@ -79,7 +79,7 @@
                     android:text="HAJIME Fukuna"
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/cyan"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
             </LinearLayout>
 
             <net.formula97.fakegpbase.TypeFacedTextView
@@ -92,7 +92,7 @@
                 android:background="@color/cyan"
                 android:text="@string/fighter_gpbase"
                 android:textColor="@android:color/black"
-                fontsample:font="formation_sans_regular.ttf" />
+                fontsample:fontName="formation_sans_regular.ttf" />
 
             <LinearLayout
                 android:id="@+id/llFighterName"
@@ -113,7 +113,7 @@
                     android:text="@string/name_gpbase"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/cyan"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
 
                 <Space
                     android:layout_width="@dimen/gpbase_text_margin"
@@ -127,7 +127,7 @@
                     android:text="HAJIME Fukuna"
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/cyan"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -156,7 +156,7 @@
                 android:paddingTop="@dimen/gpbase_text_margin"
                 android:text="@string/gunpla"
                 android:textColor="@android:color/black"
-                fontsample:font="formation_sans_regular.ttf" />
+                fontsample:fontName="formation_sans_regular.ttf" />
 
             <LinearLayout
                 android:id="@+id/llGunplaName"
@@ -178,7 +178,7 @@
                     android:text="@string/name_gpbase"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/cyan"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
 
                 <net.formula97.fakegpbase.TypeFacedTextView
                     android:id="@+id/tvGunplaName"
@@ -191,7 +191,7 @@
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/cyan"
                     android:textSize="34dp"
-                    fontsample:font="formation_sans_regular.ttf" />
+                    fontsample:fontName="formation_sans_regular.ttf" />
 
             </LinearLayout>
 
@@ -215,7 +215,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/scale_gpbase"
                         android:textColor="@android:color/black"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                     <net.formula97.fakegpbase.TypeFacedTextView
                         android:id="@+id/tvScale"
@@ -225,7 +225,7 @@
                         android:gravity="center_vertical"
                         android:text="1/144"
                         android:textColor="@color/cyan"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                 </TableRow>
 
@@ -240,7 +240,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/class_gpbase"
                         android:textColor="@android:color/black"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                     <net.formula97.fakegpbase.TypeFacedTextView
                         android:id="@+id/tvClass"
@@ -251,7 +251,7 @@
                         android:gravity="center_vertical"
                         android:text="HG"
                         android:textColor="@color/cyan"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                 </TableRow>
 
@@ -266,7 +266,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/model_gpbase"
                         android:textColor="@android:color/black"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                     <net.formula97.fakegpbase.TypeFacedTextView
                         android:id="@+id/tvModelNo"
@@ -277,7 +277,7 @@
                         android:gravity="center_vertical"
                         android:text="RX-78 GP-03S"
                         android:textColor="@color/cyan"
-                        fontsample:font="formation_sans_regular.ttf" />
+                        fontsample:fontName="formation_sans_regular.ttf" />
 
                 </TableRow>
             </TableLayout>

@@ -20,23 +20,23 @@ public class TypeFacedTextView extends TextView {
 
     public TypeFacedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        getFont(context, attrs);
+        getFontName(context, attrs);
         init();
     }
 
     public TypeFacedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        getFont(context, attrs);
+        getFontName(context, attrs);
         init();
     }
 
-    public void getFont(Context context, AttributeSet attributeSet) {
+    public void getFontName(Context context, AttributeSet attributeSet) {
         if (isInEditMode()) {
             return;
         }
 
         TypedArray ta = context.obtainStyledAttributes(attributeSet, R.styleable.TypeFacedTextView);
-        mFontName = ta.getString(R.styleable.TypeFacedTextView_font);
+        mFontName = ta.getString(R.styleable.TypeFacedTextView_fontName);
         ta.recycle();
     }
 
